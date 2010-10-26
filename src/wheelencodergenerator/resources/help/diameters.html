@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Setting encoder diameters</title>
+  <link href="main.css" rel="stylesheet" type="text/css">
+
+</head><body>
+<table>
+	<tr>
+		<td><img float="left" src="images/WheelEncoderGenerator.gif"/></td>
+		<td><h1>Setting encoder diameters</h1></td>
+	</tr>
+</table>
+<p class="summary">Every
+encoder has an inner and outer diameter setting so the encoder can be
+customized to fit your robot's wheels and encoder sensor array.</p>
+
+<img src="images/diameters.png" />
+<p>The picture above shows the inner and outer
+diameters of a wheel encoder.  The outer diameter is the total diameter of the encoder.  The inner diameter is the diameter of the inner white circle with crosshairs.</p>
+
+<p>Set
+the inner diameter by entering a number into the Inner Diameter field.
+The inner diameter will visibly change after you tab out of the field
+or click elsewhere.</p>
+
+<p>Likewise, set the
+outer diameter by entering a number into the Outer Diameter field. The
+outer diameter won't visibly change because the preview automatically
+scales the image to fit in the preview area. The inner diameter will
+change to show the change in proportions of your encoder.</p>
+
+<h2>Units</h2>
+<p>Diameters are set as integer numbers representing millimeters.</p>
+<h2>Choosing inner and outer diameters</h2>
+<p>The optimum outer diameter depends on several factors, some listed below. The inner diameter and outer diameter define the width of the tracks of your encoder.  Set inner and outer diameter so that the track width is at least slightly wider than your sensors.</p>
+<h2>The effects of resolution</h2>
+
+<p>The
+size of the encoder IR sensor and the disc diameter limits resolution.
+The IR sensor needs a stripe of a certain minimum width. Only so many
+stripes of a given width can fit on an encoder disc.</p>
+
+<p>Bigger
+diameter encoder discs permit higher resolution patterns. Suppose your
+encoder sensor can see an encoder stripe that is 5mm wide or wider. A
+50mm encoder disc with stripes that are 5mm wide at the edge will not
+have as many stripes, total, as a much larger 500mm encoder disc.</p>
+
+<p>Your
+printer resolution and the size of the encoder disc limit the
+resolution of the disc. With high resolution printers, say 600dpi, even
+if small stripes can be printed, they may be too small for an IR sensor
+to detect reliably.</p>
+
+<h2>Mounting the encoder</h2>
+
+<p>If
+the encoder is to be mounted on the robot's wheel, the outer diameter
+has to be less than that of the wheel. If the encoder is mounted on the
+gear train, inaccuracy due to gear lash will be introduced but the
+diameter may not be as constrained. This is
+particularly evident when driving the motor in one direction, then the
+other direction.</p>
+
+<h2>Using a single infrared detector</h2>
+<p>A single track</p>
+<h2>Using multiple infrared detectors</h2>
+<p>The layout of the detectors, and the number
+of detectors, determines the inner and outer diameters that can be used.</p>
+<div class="seealso">
+	<h2>See Also</h2>
+	<ul>
+		<li><a href="absolute.html">Designing absolute encoders</a></li>
+		<li><a href="incremental.html">Designing incremental encoders</a></li>
+		<li><a href="other.html">Other encoder settings</a></li>
+	</ul>
+</div>
+</body></html>

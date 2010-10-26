@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN" "http://java.sun.com/products/javahelp/map_1_0.dtd">
+<map version="1.0">
+	<mapID target="toplevelfolder" url="images/toplevel.gif"/>
+	<mapID target="top" url="intro.html"/>
+	<mapID target="weg.intro" url="intro.html"/>
+	<mapID target="tut.diameters" url="diameters.html"/>
+	<mapID target="tut.incremental" url="incremental.html"/>
+	<mapID target="menus.file" url="file.html"/>
+	<mapID target="menus.toolbar" url="tools.html"/>
+<mapID target="absolute_html" url="absolute.html"/><mapID target="printing_html" url="printing.html"/><mapID target="exporting_html" url="exporting.html"/><mapID target="notdone_html" url="notdone.html"/><mapID target="gray_html" url="gray.html"/><mapID target="binary_html" url="binary.html"/><mapID target="cantopen_html" url="cantopen.html"/><mapID target="cantexport_html" url="cantexport.html"/><mapID target="cantsave_html" url="cantsave.html"/><mapID target="inverting_html" url="inverting.html"/><mapID target="choosing_html" url="choosing.html"/><mapID target="proj_import" url="proj.import"/><mapID target="edit_syntax" url="edit.syntax"/><mapID target="debug_addexception" url="debug.addexception"/><mapID target="prof_profile" url="prof.profile"/><mapID target="menus_windows" url="menus.windows"/><mapID target="proj_run" url="proj.run"/><mapID target="debug_start" url="debug.start"/><mapID target="printsize_html" url="printsize.html"/><mapID target="aboutencoders_html" url="aboutencoders.html"/><mapID target="sensors_html" url="sensors.html"/><mapID target="other_html" url="other.html"/></map>
