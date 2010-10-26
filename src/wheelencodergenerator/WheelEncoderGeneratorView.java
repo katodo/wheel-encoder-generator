@@ -19,8 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComponent;
 import java.awt.Color;
-//import java.awt.event.WindowAdapter;
-//import java.awt.event.WindowEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.print.PrinterException;
@@ -30,7 +28,10 @@ import java.io.File;
 import java.io.IOException;
 import com.apple.OSXAdapter;
 import com.botthoughts.Debug;
-
+import java.net.URL;
+import javax.help.HelpSet;
+import javax.help.HelpBroker;
+import javax.help.CSH;
 
 /**
  * The application's main frame.
@@ -42,6 +43,9 @@ public class WheelEncoderGeneratorView extends FrameView {
     private JFileFilter wegFileFilter = new JFileFilter();
     private JFileFilter pngFileFilter = new JFileFilter();
     private DiameterInputVerifier numVerifier = new DiameterInputVerifier();
+    private HelpSet hs;
+    private HelpBroker hb;
+    private CSH.DisplayHelpFromSource helpHandler;
     public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
     public static int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     public static String NEW_FILE = "";
@@ -50,6 +54,14 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     public WheelEncoderGeneratorView(SingleFrameApplication app) {
         super(app);
+
+        System.out.println("Initializing help...");
+        
+        hs = getHelpSet("wheelencodergenerator/resources/help/WEGHelp_en.hs");
+        if (hs != null) {
+            hb = hs.createHelpBroker();
+            helpHandler = new CSH.DisplayHelpFromSource(hb);
+        }
 
         System.out.println("Initializing components...");
         initComponents();
@@ -85,6 +97,23 @@ public class WheelEncoderGeneratorView extends FrameView {
             }
         }
     }
+
+   /**
+    * find the helpset file and create a HelpSet object
+    */
+    private HelpSet getHelpSet(String helpsetfile) {
+        HelpSet hs = null;
+        ClassLoader cl = this.getClass().getClassLoader();
+        try {
+            URL hsURL = HelpSet.findHelpSet(cl, helpsetfile);
+            hs = new HelpSet(null, hsURL);
+        } catch(Exception ee) {
+            System.out.println("HelpSet: "+ee.getMessage());
+            System.out.println("HelpSet: "+ helpsetfile + " not found");
+        }
+        return hs;
+    }
+
 
      /** This method is called from within the constructor to
      * initialize the form.
@@ -132,6 +161,8 @@ public class WheelEncoderGeneratorView extends FrameView {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        helpMenuItem = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
@@ -563,6 +594,14 @@ public class WheelEncoderGeneratorView extends FrameView {
         helpMenu.setMnemonic(KeyEvent.VK_H);
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
+
+        helpMenuItem.setText(resourceMap.getString("helpMenuItem.text")); // NOI18N
+        helpMenuItem.setName("helpMenuItem"); // NOI18N
+        helpMenu.add(helpMenuItem);
+        helpMenuItem.addActionListener(helpHandler);
+
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        helpMenu.add(jSeparator4);
 
         aboutMenuItem.setAction(actionMap.get("about")); // NOI18N
         aboutMenuItem.setMnemonic(KeyEvent.VK_A);
@@ -1205,6 +1244,10 @@ public class WheelEncoderGeneratorView extends FrameView {
         return promptSaveFirst();
     }
 
+    @Action
+    public void help() {
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel absolutePanel;
     private javax.swing.JComboBox absoluteResolutionComboBox;
@@ -1220,6 +1263,7 @@ public class WheelEncoderGeneratorView extends FrameView {
     private javax.swing.JMenuItem exportMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JRadioButton grayCodeRadioButton;
+    private javax.swing.JMenuItem helpMenuItem;
     private javax.swing.JRadioButton inchButton;
     private javax.swing.JCheckBox indexCheckBox;
     private javax.swing.JTextField innerDiameter;
@@ -1228,6 +1272,7 @@ public class WheelEncoderGeneratorView extends FrameView {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JRadioButton mmButton;
