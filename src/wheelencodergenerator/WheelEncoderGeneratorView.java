@@ -182,6 +182,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         mainPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         mainPanel.setMinimumSize(new java.awt.Dimension(600, 400));
         mainPanel.setName("mainPanel"); // NOI18N
+        mainPanel.setPreferredSize(new java.awt.Dimension(700, 540));
         mainPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mainPanelMouseClicked(evt);
@@ -206,11 +207,11 @@ public class WheelEncoderGeneratorView extends FrameView {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 434, Short.MAX_VALUE)
+            .addGap(0, 418, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 422, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -482,7 +483,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -492,7 +493,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                     .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -598,22 +599,31 @@ public class WheelEncoderGeneratorView extends FrameView {
         helpMenuItem.setText(resourceMap.getString("helpMenuItem.text")); // NOI18N
         helpMenuItem.setName("helpMenuItem"); // NOI18N
         helpMenu.add(helpMenuItem);
+        if (!MAC_OS_X) {
+            helpMenuItem.setMnemonic(KeyEvent.VK_T);
+        } else {
+            helpMenuItem.setText("WheelEncoderGenerator Help");
+        }
         helpMenuItem.addActionListener(helpHandler);
 
         jSeparator4.setName("jSeparator4"); // NOI18N
-        helpMenu.add(jSeparator4);
+        if (!MAC_OS_X) {
+            helpMenu.add(jSeparator4);
+        }
 
         aboutMenuItem.setAction(actionMap.get("about")); // NOI18N
         aboutMenuItem.setMnemonic(KeyEvent.VK_A);
         aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
-        helpMenu.add(aboutMenuItem);
+        if (!MAC_OS_X) {
+            aboutMenuItem.setMnemonic(KeyEvent.VK_A);
+            helpMenu.add(aboutMenuItem);
+        }
 
         if(!MAC_OS_X) {
             helpMenu.setMnemonic(KeyEvent.VK_H);
-            aboutMenuItem.setMnemonic(KeyEvent.VK_A);
-            menuBar.add(helpMenu);
         }
+        menuBar.add(helpMenu);
 
         toolBar0.setRollover(true);
         toolBar0.setMaximumSize(new java.awt.Dimension(240, 58));
