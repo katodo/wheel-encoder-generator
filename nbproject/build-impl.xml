@@ -966,7 +966,7 @@ is divided into following sections:
         <property name="dist.dir" location="dist" />
         <property name="src.dir" location="src/wheelencodergenerator" /> -->
         <property name="dist.lib.dir" location="${dist.dir}/lib" />
-        <property name="resources_macosx" location="${src.dir}/resources/macosx" />
+        <property name="resources_macosx" location="${src.dir}/wheelencodergenerator/resources/macosx" />
         <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
         <property name="application.macos" location="${dist.dir}/${ant.project.name}.app/Contents/MacOS"/>
         <property name="application.macos.stub" location="${application.macos}/${ant.project.name}"/>
