@@ -920,10 +920,15 @@ is divided into following sections:
             -->
     <target name="winapp" depends="jar" description="Make a Windows app folder and zip">
         <!-- uses 7-Zip -->
+        <property name="jsmooth.exe" location="C:/Program Files/JSmooth 0.9.9-7/jsmoothcmd" />
+        <property name="resources_windows" location="${src.dir}/wheelencodergenerator/resources/windows"/>
+        <property name="jsmooth.file" location="${resources_windows}/WheelEncoderGenerator.jsmooth"/>
         <property name="zip.exe" location="C:/Program Files/7-Zip/7z" />
         <property name="zip.args" value="a -r -tzip" />
         <property name="dist.lib.dir" location="${dist.dir}/lib" />
         <property name="dist.zip.dir" location="${dist.dir}/${ant.project.name}" />
+
+<echo message="${resources_windows}"/>
 
         <echo message="Creating zip directories..."/>
         <mkdir dir="${dist.zip.dir}"/>
@@ -932,9 +937,21 @@ is divided into following sections:
         <echo message="Copying jar files to zip dir..."/>
         <copy toDir="${dist.zip.dir}/lib">
             <fileset dir="${dist.lib.dir}">
-                        <include name="*.jar"/>
+                <include name="*.jar"/>
             </fileset>
         </copy>
+
+        <echo message="Copying image icon to dist dir..."/>
+        <copy toDir="${dist.dir}">
+            <fileset dir="${resources_windows}">
+                <include name="WheelEncoderGenerator.png"/>
+            </fileset>
+        </copy>
+
+        <echo message="Creating executable with JSmooth..." />
+        <exec executable="${jsmooth.exe}" dir="${resources_windows}">
+            <arg value="${jsmooth.file}" />
+        </exec>
 
         <echo message="Deleting zip file..."/>
         <delete file="${dist.dir}/${ant.project.name}.zip" verbose="true" />

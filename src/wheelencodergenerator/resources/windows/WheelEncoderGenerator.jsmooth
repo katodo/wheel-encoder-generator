@@ -11,9 +11,10 @@
 <classPath>..\..\..\..\dist\lib\appframework-1.0.3.jar</classPath>
 <classPath>..\..\..\..\dist\lib\beansbinding-1.2.1.jar</classPath>
 <classPath>..\..\..\..\dist\lib\swing-worker-1.1.jar</classPath>
+<classPath>..\..\..\..\dist\lib\jhall.jar</classPath>
 <embeddedJar>true</embeddedJar>
-<executableName>..\..\..\..\dist\WheelEncoderGenerator.exe</executableName>
-<iconLocation>..\WheelEncoderGenerator.ico</iconLocation>
+<executableName>..\..\..\..\dist\WheelEncoderGenerator\WheelEncoderGenerator.exe</executableName>
+<iconLocation>..\..\..\..\dist\WheelEncoderGenerator.png</iconLocation>
 <initialMemoryHeap>52428800</initialMemoryHeap>
 <jarLocation>..\..\..\..\dist\WheelEncoderGenerator.jar</jarLocation>
 <mainClassName>wheelencodergenerator.WheelEncoderGeneratorApp</mainClassName>
