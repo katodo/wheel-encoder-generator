@@ -918,6 +918,7 @@ is divided into following sections:
                 OS PACKAGE SECTION
                 ==================
             -->
+
     <target name="winapp" depends="jar" description="Make a Windows app folder and zip">
         <!-- uses 7-Zip -->
         <property name="jsmooth.exe" location="C:/Program Files/JSmooth 0.9.9-7/jsmoothcmd" />
@@ -927,8 +928,6 @@ is divided into following sections:
         <property name="zip.args" value="a -r -tzip" />
         <property name="dist.lib.dir" location="${dist.dir}/lib" />
         <property name="dist.zip.dir" location="${dist.dir}/${ant.project.name}" />
-
-<echo message="${resources_windows}"/>
 
         <echo message="Creating zip directories..."/>
         <mkdir dir="${dist.zip.dir}"/>
