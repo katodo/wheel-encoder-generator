@@ -18,12 +18,14 @@ import javax.swing.InputVerifier;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComponent;
+import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.awt.Toolkit;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import com.apple.OSXAdapter;
@@ -56,23 +58,28 @@ public class WheelEncoderGeneratorView extends FrameView {
         super(app);
 
         System.out.println("Initializing help...");
-        
+
+        // Setup help system
         hs = getHelpSet("wheelencodergenerator/resources/help/WEGHelp_en.hs");
         if (hs != null) {
             hb = hs.createHelpBroker();
             helpHandler = new CSH.DisplayHelpFromSource(hb);
         }
 
+        // Initialize windows, widgets, etc.
         System.out.println("Initializing components...");
         initComponents();
         registerForMacOSXEvents(); // OSX-specific setup
 
+        // Setup file filters for weg and image files
         wegFileFilter.setDescription("Wheel Encoder Generator files (*.weg)");
         wegFileFilter.addType(".weg");
         pngFileFilter.setDescription("PNG Images (*.png)");
         pngFileFilter.addType(".png");
 
-        Debug.println("selected: " + encoderTabbedPane.getSelectedComponent().getName());
+        // Set taskbar / app jframe icon
+        Image image = new ImageIcon(getClass().getResource("/wheelencodergenerator/resources/windows/WheelEncoderGenerator.png")).getImage();
+        getFrame().setIconImage(image);
 
         // Initial "load" of new encoder
         newEncoder();
@@ -102,18 +109,24 @@ public class WheelEncoderGeneratorView extends FrameView {
     * find the helpset file and create a HelpSet object
     */
     private HelpSet getHelpSet(String helpsetfile) {
-        HelpSet hs = null;
+        HelpSet myHS = null;
         ClassLoader cl = this.getClass().getClassLoader();
         try {
             URL hsURL = HelpSet.findHelpSet(cl, helpsetfile);
-            hs = new HelpSet(null, hsURL);
+            myHS = new HelpSet(null, hsURL);
         } catch(Exception ee) {
             System.out.println("HelpSet: "+ee.getMessage());
             System.out.println("HelpSet: "+ helpsetfile + " not found");
         }
-        return hs;
+        return myHS;
     }
 
+    public final void setTaskBarIcon()
+    {
+        JFrame mainFrame = this.getFrame();//WheelEncoderGeneratorApp.getApplication().getMainFrame();
+        Debug.println("image: "+Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
+        mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
+    }
 
      /** This method is called from within the constructor to
      * initialize the form.
@@ -207,11 +220,11 @@ public class WheelEncoderGeneratorView extends FrameView {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 418, Short.MAX_VALUE)
+            .addGap(0, 434, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 422, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -483,7 +496,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -493,7 +506,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                     .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );

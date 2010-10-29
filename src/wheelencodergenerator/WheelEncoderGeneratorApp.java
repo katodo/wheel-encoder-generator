@@ -6,6 +6,7 @@ package wheelencodergenerator;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import java.awt.Toolkit;
 
 /**
  * The main class of the application.
@@ -19,11 +20,14 @@ public class WheelEncoderGeneratorApp extends SingleFrameApplication implements 
      */
     @Override protected void startup() {
         addExitListener(this);
+        com.botthoughts.Debug.println("added exit listener.");
         show(view = new WheelEncoderGeneratorView(this));
+        //getMainFrame().setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
+        //view.setTaskBarIcon();
     }
 
     @Override public boolean canExit(java.util.EventObject e) {
-        System.out.println("WheelEncoderGeneratorApp.canExit(): calling appView.quit()");
+        com.botthoughts.Debug.println("calling appView.quit()");
         return view.quit();
     }
 
