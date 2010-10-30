@@ -6,7 +6,6 @@
 <JVMSearchPath>jdkpath</JVMSearchPath>
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
-<arguments></arguments>
 <classPath>..\..\..\..\dist\lib\AbsoluteLayout.jar</classPath>
 <classPath>..\..\..\..\dist\lib\appframework-1.0.3.jar</classPath>
 <classPath>..\..\..\..\dist\lib\beansbinding-1.2.1.jar</classPath>

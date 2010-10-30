@@ -17,19 +17,12 @@
     <data>WEGHelpTOC.xml</data>
   </view>
 
-  <view>
-    <name>Index</name>
-    <label>Index</label>
-    <type>javax.help.IndexView</type>
-    <data>WEGHelpIndex.xml</data>
-  </view>
+  
 
   <view>
     <name>Search</name>
     <label>Search</label>
     <type>javax.help.SearchView</type>
-    <data engine="com.sun.java.help.search.DefaultSearchEngine">
-      JavaHelpSearch
-    </data>
+    <data engine="com.sun.java.help.search.DefaultSearchEngine">JavaHelpSearch</data>
   </view>
 </helpset>

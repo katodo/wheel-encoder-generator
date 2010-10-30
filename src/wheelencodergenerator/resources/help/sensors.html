@@ -16,12 +16,12 @@
 Reflective sensors use reflection of infrared light to detect stripes.  The encoder discs are made with reflective and non-reflective stripes.  White paper provides enough reflectivity and black printer toner or ink inhibits reflectivity enough that one can easily create encoder discs on a printer.</p>
 <p>Alternatively, a disc made of metal, like aluminum, is even more reflective.  Black stripes can be printed on a transparency material and placed on the disc.</p>
 <h2>Interruptor Sensors</h2>
-<p>The typical roller ball mouse (remember those?) exemplifies the use of photointerruptor sensors.  An opaque disc is fashioned with slots cut in it.  An infrared LED is placed on one side, and a phototransistor on the other.  When the disc rotates, the slits periodically expose the phototransistor to the infrared LED.  Of course this approach isn't easy to build as it requires precise machining equipment.</p>
+<p>The typical roller ball mouse (remember those?) exemplifies the use of photointerrupter sensors.  An opaque disc is fashioned with slots cut in it.  An infrared LED is placed on one side, and a phototransistor on the other.  When the disc rotates, the slits periodically expose the phototransistor to the infrared LED.  Of course this approach isn't easy to build as it requires precise machining equipment.</p>
 <p>The model used in some inkjet printers works better. Instead of a disc with slits, a transparent disc is created with black stripes printed on it. The black stripes inhibit transmission of light to the phototransistor.</p>
 <h2>Sensor Hardware</h2>
 <p>Infrared LEDs and phototransistors that are designed for use in encoder sensors are sold in pairs.  In fact, usually these devices are contained in the same housing.  Some common IR pairs are shown below.</p>
 <img src="images/sensors.png"/>
-<p>The Fairchild QRB1114 (left) is fairly large but easily mounted.  The tiny, surface-mount Fairchild QRE1113 (center), shown on a Sparkfun breakout board, allows for smaller, higher resolution encoder discs with multiple tracks.  Photo interruptors are configured like this Fairchild H21A1 (right).</p>
+<p>The Fairchild QRB1114 (left) is fairly large but easily mounted.  The tiny, surface-mount Fairchild QRE1113 (center), shown on a Sparkfun breakout board, allows for smaller, higher resolution encoder discs with multiple tracks.  Photo interrupters are configured like this Fairchild H21A1 (right).</p>
 <div class="seealso">
 <h2>Electronics</h2>
 <p>Electronics are required to power the sensor pair and interface them with a computer or microcontroller.  The LED is simply powered from the supply with a resistor to limit current.  The phototransistor can be wired in such a way that sensed light causes either a low (active-low) or high (active-high) output.  So the encoder or the software has to be designed accordingly.</p>

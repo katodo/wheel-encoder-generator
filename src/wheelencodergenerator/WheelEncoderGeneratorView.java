@@ -121,12 +121,15 @@ public class WheelEncoderGeneratorView extends FrameView {
         return myHS;
     }
 
+    /*
     public final void setTaskBarIcon()
     {
         JFrame mainFrame = this.getFrame();//WheelEncoderGeneratorApp.getApplication().getMainFrame();
         Debug.println("image: "+Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
         mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
     }
+     * 
+     */
 
      /** This method is called from within the constructor to
      * initialize the form.
