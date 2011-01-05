@@ -919,7 +919,7 @@ is divided into following sections:
                 ==================
             -->
 
-    <target name="winapp" depends="jar" description="Make a Windows app folder and zip">
+    <target name="app-windows" depends="jar" description="Make a Windows app folder and zip">
         <!-- uses 7-Zip -->
         <property name="jsmooth.exe" location="C:/Program Files/JSmooth 0.9.9-7/jsmoothcmd" />
         <property name="resources_windows" location="${src.dir}/wheelencodergenerator/resources/windows"/>
@@ -961,7 +961,41 @@ is divided into following sections:
         <echo message="Done zipping" />
     </target>
 
-    <target name="osxapp" depends="jar" description="Make a double-clickable Mac OS X application">
+    <target name="app-linux" depends="jar" description="Make a double-clickable Linux application">
+        <property name="dist.lib.dir" location="${dist.dir}/lib" />
+        <property name="resources_linux" location="${src.dir}/wheelencodergenerator/resources/linux" />
+        <property name="application.linux" location="${dist.dir}/WheelEncoderGenerator.linux"/>
+        <property name="application.linux.lib" location="${application.linux}/lib"/>
+
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${application.linux}"/>
+        <mkdir dir="${application.linux.lib}"/>
+        <!-- copy jars -->
+        <copy toDir="${application.linux}">
+                <fileset dir="${dist.jar.dir}">
+                        <include name="*.jar"/>
+                </fileset>
+        </copy>
+        <copy toDir="${application.linux.lib}">
+                <fileset dir="${dist.lib.dir}">
+                        <include name="*.jar"/>
+                </fileset>
+        </copy>
+        <!-- copy launch script and fix permissions -->
+        <copy file="${resources_linux}/launch" toDir="${application.linux}"/>
+        <exec executable="/bin/chmod">
+                <arg line="775 ${application.linux}/launch"/>
+        </exec>
+        <!-- create self-extracting script, compress it for download -->
+        <exec executable="${resources_linux}/makeself.sh" >
+                <arg line="${application.linux} ${dist.dir}/WheelEncoderGenerator WheelEncoderGenerator ./launch" />
+        </exec>
+        <exec executable="/bin/gzip" >
+                <arg line="${dist.dir}/WheelEncoderGenerator"/>
+        </exec>
+    </target>
+
+    <target name="app-osx" depends="jar" description="Make a double-clickable Mac OS X application">
        <!--
         <property name="dist.dir" location="dist" />
         <property name="src.dir" location="src/wheelencodergenerator" /> -->
