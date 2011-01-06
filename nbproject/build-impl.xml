@@ -988,7 +988,7 @@ is divided into following sections:
         </exec>
         <!-- create self-extracting script, compress it for download -->
         <exec executable="${resources_linux}/makeself.sh" >
-                <arg line="${application.linux} ${dist.dir}/WheelEncoderGenerator WheelEncoderGenerator ./launch" />
+                <arg line="--nox11 ${application.linux} ${dist.dir}/WheelEncoderGenerator WheelEncoderGenerator ./launch" />
         </exec>
         <exec executable="/bin/gzip" >
                 <arg line="${dist.dir}/WheelEncoderGenerator"/>

@@ -38,7 +38,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="encoderPanel" alignment="0" pref="437" max="32767" attributes="1"/>
+                      <Component id="encoderPanel" alignment="0" pref="431" max="32767" attributes="1"/>
                       <Component id="controlPanel" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -81,7 +81,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="427" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -709,11 +709,11 @@
               <Dimension value="[50, 50]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[32, 50]"/>
+              <Dimension value="[50, 50]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="newButton" noResource="true"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[32, 50]"/>
+              <Dimension value="[50, 50]"/>
             </Property>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
@@ -733,11 +733,11 @@
               <Dimension value="[50, 50]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[32, 50]"/>
+              <Dimension value="[50, 50]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="openButton" noResource="true"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[32, 50]"/>
+              <Dimension value="[60, 50]"/>
             </Property>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
@@ -746,15 +746,12 @@
           <Properties>
             <Property name="rollover" type="boolean" value="true"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[170, 54]"/>
+              <Dimension value="[250, 54]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[130, 54]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="toolBar1" noResource="true"/>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[130, 54]"/>
-            </Property>
           </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
@@ -774,7 +771,7 @@
                   <Dimension value="[50, 50]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[32, 50]"/>
+                  <Dimension value="[50, 50]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="saveButton" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -795,7 +792,7 @@
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[55, 50]"/>
+                  <Dimension value="[100, 50]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[32, 50]"/>
@@ -819,7 +816,7 @@
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[50, 50]"/>
+                  <Dimension value="[60, 50]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[32, 50]"/>
@@ -860,7 +857,7 @@
                 </Property>
                 <Property name="name" type="java.lang.String" value="printButton" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[32, 50]"/>
+                  <Dimension value="[50, 50]"/>
                 </Property>
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>

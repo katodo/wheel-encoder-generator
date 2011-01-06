@@ -30,10 +30,16 @@ import java.io.File;
 import java.io.IOException;
 import com.apple.OSXAdapter;
 import com.botthoughts.Debug;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.help.HelpSet;
 import javax.help.HelpBroker;
 import javax.help.CSH;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
 
 /**
  * The application's main frame.
@@ -86,6 +92,52 @@ public class WheelEncoderGeneratorView extends FrameView {
         System.out.println("Done with View initialization...");
     }
 
+    // One by one we need to fix width of components
+    // remove them and re add them. This is a kludge and
+    // surely there is a better way...
+    public void fixButtonWidths() {
+        fixToolBar(toolBar0);
+        fixToolBar(toolBar1);
+        fixToolBar(toolBar2);
+    }
+
+    private void fixToolBar(JToolBar tb)
+    {
+        Component componentList[];
+        int width = 0;
+
+        componentList = tb.getComponents();
+        System.err.println(tb.getName());
+        for (int i = 0; i < componentList.length; i++) {
+            if (componentList[i].getClass().getName() == "javax.swing.JButton") {
+                JButton b = (JButton) componentList[i];
+                System.err.println(i+" "+componentList[i].getName()+ " " + componentList[i].getClass().getName());
+                width += fixWidth((JButton) componentList[i]);
+            }
+            tb.remove(componentList[i]);
+        }
+        for (int i = 0; i < componentList.length; i++) {
+            tb.add(componentList[i]);
+        }
+        tb.repaint();
+
+    }
+
+    // Automatically resets button preferred width to text width
+    // This is a huge cross-platform headache and I guess I'm too dumb
+    private int fixWidth(JButton b) {
+        FontMetrics fm = b.getFontMetrics(b.getFont());
+        int width = b.getWidth();
+        int height = b.getHeight();
+        int insets = b.getInsets().left + b.getInsets().right;
+        int textWidth = fm.stringWidth(b.getText());
+        System.err.println("width="+width+" height="+height+" textWidth="+textWidth+" insets="+insets);
+        b.setPreferredSize(new Dimension(textWidth + insets, height));
+        System.err.println("width="+b.getPreferredSize().width+" height="+b.getPreferredSize().height);
+        b.repaint();
+
+        return b.getPreferredSize().width;
+    }
 
     // Generic registration with the Mac OS X application menu
     // Checks the platform, then attempts to register with the Apple EAWT
@@ -227,7 +279,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 433, Short.MAX_VALUE)
+            .addGap(0, 427, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -509,7 +561,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                     .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -654,9 +706,9 @@ public class WheelEncoderGeneratorView extends FrameView {
         newButton.setFocusable(false);
         newButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         newButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        newButton.setMinimumSize(new java.awt.Dimension(32, 50));
+        newButton.setMinimumSize(new java.awt.Dimension(50, 50));
         newButton.setName("newButton"); // NOI18N
-        newButton.setPreferredSize(new java.awt.Dimension(32, 50));
+        newButton.setPreferredSize(new java.awt.Dimension(50, 50));
         newButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar0.add(newButton);
 
@@ -668,17 +720,16 @@ public class WheelEncoderGeneratorView extends FrameView {
         openButton.setFocusable(false);
         openButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         openButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        openButton.setMinimumSize(new java.awt.Dimension(32, 50));
+        openButton.setMinimumSize(new java.awt.Dimension(50, 50));
         openButton.setName("openButton"); // NOI18N
-        openButton.setPreferredSize(new java.awt.Dimension(32, 50));
+        openButton.setPreferredSize(new java.awt.Dimension(60, 50));
         openButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar0.add(openButton);
 
         toolBar1.setRollover(true);
-        toolBar1.setMaximumSize(new java.awt.Dimension(170, 54));
+        toolBar1.setMaximumSize(new java.awt.Dimension(250, 54));
         toolBar1.setMinimumSize(new java.awt.Dimension(130, 54));
         toolBar1.setName("toolBar1"); // NOI18N
-        toolBar1.setPreferredSize(new java.awt.Dimension(130, 54));
 
         saveButton.setAction(actionMap.get("saveEncoder")); // NOI18N
         saveButton.setIcon(resourceMap.getIcon("saveButton.icon")); // NOI18N
@@ -688,7 +739,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         saveButton.setFocusable(false);
         saveButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         saveButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        saveButton.setMinimumSize(new java.awt.Dimension(32, 50));
+        saveButton.setMinimumSize(new java.awt.Dimension(50, 50));
         saveButton.setName("saveButton"); // NOI18N
         saveButton.setPreferredSize(new java.awt.Dimension(32, 50));
         saveButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -701,7 +752,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         saveAsButton.setBorderPainted(false);
         saveAsButton.setFocusable(false);
         saveAsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        saveAsButton.setMaximumSize(new java.awt.Dimension(55, 50));
+        saveAsButton.setMaximumSize(new java.awt.Dimension(100, 50));
         saveAsButton.setMinimumSize(new java.awt.Dimension(32, 50));
         saveAsButton.setName("saveAsButton"); // NOI18N
         saveAsButton.setPreferredSize(new java.awt.Dimension(32, 50));
@@ -715,7 +766,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         exportButton.setBorderPainted(false);
         exportButton.setFocusable(false);
         exportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        exportButton.setMaximumSize(new java.awt.Dimension(50, 50));
+        exportButton.setMaximumSize(new java.awt.Dimension(60, 50));
         exportButton.setMinimumSize(new java.awt.Dimension(32, 50));
         exportButton.setName("exportButton"); // NOI18N
         exportButton.setPreferredSize(new java.awt.Dimension(32, 50));
@@ -737,7 +788,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         printButton.setMaximumSize(new java.awt.Dimension(50, 50));
         printButton.setMinimumSize(new java.awt.Dimension(32, 50));
         printButton.setName("printButton"); // NOI18N
-        printButton.setPreferredSize(new java.awt.Dimension(32, 50));
+        printButton.setPreferredSize(new java.awt.Dimension(50, 50));
         printButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar2.add(printButton);
 
@@ -1220,6 +1271,7 @@ public class WheelEncoderGeneratorView extends FrameView {
                 job.print();
             } catch (PrinterException e) {
                 // The job did not successfully complete
+                System.err.println(">>> Printer error: " + e.getMessage());
             }
         }
 

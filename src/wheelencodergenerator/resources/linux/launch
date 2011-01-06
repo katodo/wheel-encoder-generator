@@ -1,5 +1,5 @@
 #!/bin/bash
 
-java -jar WheelEncoderGenerator.jar --classpath lib/*
+java -jar WheelEncoderGenerator.jar --classpath lib/* > /dev/null 2>&1
 
 exit

@@ -24,6 +24,7 @@ public class WheelEncoderGeneratorApp extends SingleFrameApplication implements 
         show(view = new WheelEncoderGeneratorView(this));
         //getMainFrame().setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
         //view.setTaskBarIcon();
+        view.fixButtonWidths();
     }
 
     @Override public boolean canExit(java.util.EventObject e) {
