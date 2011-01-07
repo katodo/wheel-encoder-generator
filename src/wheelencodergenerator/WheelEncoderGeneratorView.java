@@ -54,6 +54,7 @@ public class WheelEncoderGeneratorView extends FrameView {
     private HelpSet hs;
     private HelpBroker hb;
     private CSH.DisplayHelpFromSource helpHandler;
+    private int exportWidth = 600; // persist this in a preferences file
     public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
     public static int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     public static String NEW_FILE = "";
@@ -107,33 +108,41 @@ public class WheelEncoderGeneratorView extends FrameView {
         int width = 0;
 
         componentList = tb.getComponents();
-        System.err.println(tb.getName());
+        //System.err.println(tb.getName());
         for (int i = 0; i < componentList.length; i++) {
             if (componentList[i].getClass().getName() == "javax.swing.JButton") {
                 JButton b = (JButton) componentList[i];
-                System.err.println(i+" "+componentList[i].getName()+ " " + componentList[i].getClass().getName());
-                width += fixWidth((JButton) componentList[i]);
+                //System.err.println(i+" "+componentList[i].getName()+ " " + componentList[i].getClass().getName());
+                width += fixButtonWidth((JButton) componentList[i]);
             }
             tb.remove(componentList[i]);
         }
+        Dimension d = new Dimension(width+10, tb.getSize().height);
+        tb.setMinimumSize(d);
+        tb.setMaximumSize(d);
+        tb.setPreferredSize(d);
+        tb.setSize(d);
         for (int i = 0; i < componentList.length; i++) {
             tb.add(componentList[i]);
         }
         tb.repaint();
-
     }
 
     // Automatically resets button preferred width to text width
     // This is a huge cross-platform headache and I guess I'm too dumb
-    private int fixWidth(JButton b) {
+    private int fixButtonWidth(JButton b) {
         FontMetrics fm = b.getFontMetrics(b.getFont());
         int width = b.getWidth();
         int height = b.getHeight();
         int insets = b.getInsets().left + b.getInsets().right;
         int textWidth = fm.stringWidth(b.getText());
-        System.err.println("width="+width+" height="+height+" textWidth="+textWidth+" insets="+insets);
-        b.setPreferredSize(new Dimension(textWidth + insets, height));
-        System.err.println("width="+b.getPreferredSize().width+" height="+b.getPreferredSize().height);
+        //System.err.println("width="+width+" height="+height+" textWidth="+textWidth+" insets="+insets);
+        Dimension d = new Dimension(textWidth + insets, height);
+        b.setPreferredSize(d);
+        b.setMaximumSize(d);
+        b.setMinimumSize(d);
+        b.setSize(d);
+        //System.err.println("width="+b.getPreferredSize().width+" height="+b.getPreferredSize().height);
         b.repaint();
 
         return b.getPreferredSize().width;
@@ -275,11 +284,11 @@ public class WheelEncoderGeneratorView extends FrameView {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 434, Short.MAX_VALUE)
+            .addGap(0, 418, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGap(0, 422, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -551,7 +560,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -561,7 +570,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                     .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -738,8 +747,8 @@ public class WheelEncoderGeneratorView extends FrameView {
         saveButton.setBorderPainted(false);
         saveButton.setFocusable(false);
         saveButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        saveButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        saveButton.setMinimumSize(new java.awt.Dimension(50, 50));
+        saveButton.setMaximumSize(new java.awt.Dimension(40, 50));
+        saveButton.setMinimumSize(new java.awt.Dimension(40, 50));
         saveButton.setName("saveButton"); // NOI18N
         saveButton.setPreferredSize(new java.awt.Dimension(32, 50));
         saveButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -766,7 +775,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         exportButton.setBorderPainted(false);
         exportButton.setFocusable(false);
         exportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        exportButton.setMaximumSize(new java.awt.Dimension(60, 50));
+        exportButton.setMaximumSize(new java.awt.Dimension(50, 50));
         exportButton.setMinimumSize(new java.awt.Dimension(32, 50));
         exportButton.setName("exportButton"); // NOI18N
         exportButton.setPreferredSize(new java.awt.Dimension(32, 50));
@@ -785,10 +794,10 @@ public class WheelEncoderGeneratorView extends FrameView {
         printButton.setBorderPainted(false);
         printButton.setFocusable(false);
         printButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        printButton.setMaximumSize(new java.awt.Dimension(50, 50));
+        printButton.setMaximumSize(new java.awt.Dimension(40, 50));
         printButton.setMinimumSize(new java.awt.Dimension(32, 50));
         printButton.setName("printButton"); // NOI18N
-        printButton.setPreferredSize(new java.awt.Dimension(50, 50));
+        printButton.setPreferredSize(new java.awt.Dimension(40, 50));
         printButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar2.add(printButton);
 
@@ -968,7 +977,7 @@ public class WheelEncoderGeneratorView extends FrameView {
                 outerDiameter.setForeground(Color.black);
                 innerDiameter.setForeground(Color.black);
             }
-            // Is resolution even (ok), or odd (not ok) ?
+            // Is width even (ok), or odd (not ok) ?
             int i = Integer.parseInt(resolutionSpinner.getModel().getValue().toString());
             if ( (i % 2) > 0 ) {
                 i++; // just fix it (note that we can never get Maximum+1 so we can get away with increment
@@ -1279,10 +1288,38 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     @Action
     public void exportEncoder() {
+        boolean error = false;
+        
+        JFrame mainFrame = WheelEncoderGeneratorApp.getApplication().getMainFrame();
+        //ExportDialog exportDialog = new ExportDialog(mainFrame, true);
+        //exportDialog.setVisible(true);
+
+        do {
+            String s = (String) JOptionPane.showInputDialog(
+                        mainFrame,
+                        "Image width in pixels:\n",
+                        "Export Dialog",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        exportWidth);
+
+            if (s == null)
+                return;
+
+            try {
+                exportWidth = Integer.parseInt(s);
+                //System.out.println("Width = "+width);
+                error = exportWidth < 1;
+            } catch (NumberFormatException e) {
+                error = true;
+            }
+        } while (error);
+
         File image = promptFileSave(new File("Untitled.png"), pngFileFilter);
         if (image != null) {
             try {
-                encoderPanel.export(image, "png", 600);
+                encoderPanel.export(image, "png", exportWidth);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(getFrame(),
                     "Error exporting image file", "File Export Error",

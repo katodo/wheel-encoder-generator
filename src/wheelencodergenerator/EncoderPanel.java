@@ -69,7 +69,7 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
 
         for (int track = 0; track < maxTrack; track++) {
             offset = e.getOffset(track);
-            double dA = id + (maxTrack-track) * (d - id) / maxTrack;
+            double dA = id + (maxTrack-track) * (d - id - 1) / maxTrack;
             double xA = x + track * trackWidth / maxTrack;
             double yA = y + track * trackWidth / maxTrack;
 
