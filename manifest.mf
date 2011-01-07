@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
 X-COMMENT: Main-Class will be added automatically by build
-SplashScreen-Image: Contents/Resources/Java/wheelencodergenerator/resources/splash.png
+SplashScreen-Image: wheelencodergenerator/resources/splash.png
