@@ -645,6 +645,15 @@
                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="if (!MAC_OS_X) {&#xa;  helpMenuItem.setMnemonic(KeyEvent.VK_T);&#xa;} else {&#xa;  helpMenuItem.setText(&quot;WheelEncoderGenerator Help&quot;);&#xa;}&#xa;helpMenuItem.addActionListener(helpHandler);"/>
               </AuxValues>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wheelencodergenerator.WheelEncoderGeneratorView" id="submitIssue" methodName="submitIssue"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="jMenuItem1.text"/>
+                <Property name="name" type="java.lang.String" value="jMenuItem1" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator4">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>
