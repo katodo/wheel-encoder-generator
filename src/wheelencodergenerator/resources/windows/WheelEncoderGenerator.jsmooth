@@ -13,6 +13,11 @@
 <classPath>WheelEncoderGenerator\lib\swing-worker-1.1.jar</classPath>
 <classPath>WheelEncoderGenerator\lib\jhall.jar</classPath>
 <classPath>WheelEncoderGenerator\lib\swing-layout-1.0.4.jar</classPath>
+<classPath>WheelEncoderGenerator\lib\gdata-core-1.0.jar</classPath>
+<classPath>WheelEncoderGenerator\lib\gdata-projecthosting-2.1.jar</classPath>
+<classPath>WheelEncoderGenerator\lib\gdata-projecthosting-meta-2.1.jar</classPath>
+<classPath>WheelEncoderGenerator\lib\guava-r07-gwt.jar</classPath>
+<classPath>WheelEncoderGenerator\lib\guava-r07.jar</classPath>
 <embeddedJar>true</embeddedJar>
 <executableName>WheelEncoderGenerator\WheelEncoderGenerator.exe</executableName>
 <iconLocation>WheelEncoderGenerator.png</iconLocation>
