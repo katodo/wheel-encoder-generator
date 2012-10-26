@@ -6,7 +6,6 @@ package wheelencodergenerator;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
-import java.awt.Toolkit;
 
 /**
  * The main class of the application.
@@ -31,7 +30,8 @@ public class WheelEncoderGeneratorApp extends SingleFrameApplication implements 
     @Override public boolean canExit(java.util.EventObject e) {
         com.botthoughts.Debug.println("calling appView.quit()");
         com.botthoughts.Debug.println(Thread.currentThread().getName());
-        return view.quit();
+        // TODO: clean up the quit stuff
+        return view.main.quit();
     }
 
     @Override public void willExit(java.util.EventObject e) {
