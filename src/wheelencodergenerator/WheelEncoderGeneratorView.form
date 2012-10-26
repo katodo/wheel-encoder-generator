@@ -38,7 +38,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="encoderPanel" alignment="0" pref="439" max="32767" attributes="1"/>
+                      <Component id="encoderPanel" alignment="0" pref="437" max="32767" attributes="1"/>
                       <Component id="controlPanel" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -81,7 +81,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="435" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -645,15 +645,6 @@
                 <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="if (!MAC_OS_X) {&#xa;  helpMenuItem.setMnemonic(KeyEvent.VK_T);&#xa;} else {&#xa;  helpMenuItem.setText(&quot;WheelEncoderGenerator Help&quot;);&#xa;}&#xa;helpMenuItem.addActionListener(helpHandler);"/>
               </AuxValues>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wheelencodergenerator.WheelEncoderGeneratorView" id="submitIssue" methodName="submitIssue"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jMenuItem1.text"/>
-                <Property name="name" type="java.lang.String" value="jMenuItem1" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator4">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>
@@ -680,6 +671,29 @@
                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="updateMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="updateMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="updateMenuItem" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator5">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="reportMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="reportMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="reportMenuItem" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -718,11 +732,11 @@
               <Dimension value="[50, 50]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[50, 50]"/>
+              <Dimension value="[32, 50]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="newButton" noResource="true"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[50, 50]"/>
+              <Dimension value="[32, 50]"/>
             </Property>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
@@ -742,11 +756,11 @@
               <Dimension value="[50, 50]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[50, 50]"/>
+              <Dimension value="[32, 50]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="openButton" noResource="true"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[60, 50]"/>
+              <Dimension value="[32, 50]"/>
             </Property>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
@@ -755,12 +769,15 @@
           <Properties>
             <Property name="rollover" type="boolean" value="true"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[180, 54]"/>
+              <Dimension value="[170, 54]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[130, 54]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="toolBar1" noResource="true"/>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[130, 54]"/>
+            </Property>
           </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
@@ -780,7 +797,7 @@
                   <Dimension value="[50, 50]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[40, 50]"/>
+                  <Dimension value="[32, 50]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="saveButton" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -842,9 +859,6 @@
         <Container class="javax.swing.JToolBar" name="toolBar2">
           <Properties>
             <Property name="rollover" type="boolean" value="true"/>
-            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[60, 52]"/>
-            </Property>
             <Property name="name" type="java.lang.String" value="toolBar2" noResource="true"/>
           </Properties>
 
@@ -862,14 +876,14 @@
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[40, 50]"/>
+                  <Dimension value="[50, 50]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[32, 50]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="printButton" noResource="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[40, 50]"/>
+                  <Dimension value="[32, 50]"/>
                 </Property>
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
