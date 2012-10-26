@@ -42,7 +42,7 @@ public class IssueDialog extends javax.swing.JDialog {
         return issueDescription.getText();
     }
 
-    public String getType() {
+    public String getIssueType() {
         return issueType.getSelectedItem().toString();
     }
 
@@ -69,8 +69,6 @@ public class IssueDialog extends javax.swing.JDialog {
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setName("Form"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext().getResourceMap(IssueDialog.class);
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
 
         issueType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Defect", "Enhancement" }));
@@ -81,18 +79,16 @@ public class IssueDialog extends javax.swing.JDialog {
             }
         });
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext().getResourceMap(IssueDialog.class);
         issueSummary.setText(resourceMap.getString("issueSummary.text")); // NOI18N
         issueSummary.setName("issueSummary"); // NOI18N
 
         issueDescription.setName("issueDescription"); // NOI18N
-        issueDescription.setText(resourceMap.getString("issueDescription.text")); // NOI18N
 
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        issueSubmit.setActionCommand(resourceMap.getString("issueSubmit.actionCommand")); // NOI18N
         issueSubmit.setLabel(resourceMap.getString("issueSubmit.label")); // NOI18N
         issueSubmit.setName("issueSubmit"); // NOI18N
         issueSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -102,7 +98,6 @@ public class IssueDialog extends javax.swing.JDialog {
         });
         jPanel1.add(issueSubmit);
 
-        issueCancel.setActionCommand(resourceMap.getString("issueCancel.actionCommand")); // NOI18N
         issueCancel.setLabel(resourceMap.getString("issueCancel.label")); // NOI18N
         issueCancel.setName("issueCancel"); // NOI18N
         issueCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -126,7 +121,7 @@ public class IssueDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(issueType, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(issueSummary, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)))
+                            .addComponent(issueSummary, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

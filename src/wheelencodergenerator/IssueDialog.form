@@ -40,7 +40,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="issueType" min="-2" pref="114" max="-2" attributes="0"/>
-                          <Component id="issueSummary" pref="325" max="32767" attributes="0"/>
+                          <Component id="issueSummary" pref="380" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -79,7 +79,6 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
         <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
       </Properties>
     </Component>
@@ -106,12 +105,10 @@
     <Component class="java.awt.TextArea" name="issueDescription">
       <Properties>
         <Property name="name" type="java.lang.String" value="issueDescription" noResource="true"/>
-        <Property name="text" type="java.lang.String" resourceKey="issueDescription.text"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
         <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
       </Properties>
     </Component>
@@ -124,7 +121,6 @@
       <SubComponents>
         <Component class="java.awt.Button" name="issueSubmit">
           <Properties>
-            <Property name="actionCommand" type="java.lang.String" resourceKey="issueSubmit.actionCommand"/>
             <Property name="label" type="java.lang.String" resourceKey="issueSubmit.label"/>
             <Property name="name" type="java.lang.String" value="issueSubmit" noResource="true"/>
           </Properties>
@@ -134,7 +130,6 @@
         </Component>
         <Component class="java.awt.Button" name="issueCancel">
           <Properties>
-            <Property name="actionCommand" type="java.lang.String" resourceKey="issueCancel.actionCommand"/>
             <Property name="label" type="java.lang.String" resourceKey="issueCancel.label"/>
             <Property name="name" type="java.lang.String" value="issueCancel" noResource="true"/>
           </Properties>

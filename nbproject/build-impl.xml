@@ -917,7 +917,7 @@ is divided into following sections:
                 ==================
                 OS PACKAGE SECTION
                 ==================
-            -->
+    -->
 
     <target name="app-windows" depends="jar" description="Make a Windows app folder and zip">
         <!-- uses 7-Zip -->
@@ -928,39 +928,32 @@ is divided into following sections:
         <property name="jsmooth.dist" location="${dist.dir}/${Application.id}.jsmooth"/>
         <property name="zip.exe" location="C:/Program Files/7-Zip/7z" />
         <property name="zip.args" value="a -r -tzip" />
+        <property name="launch4j.dir" location="C:/Program Files/Launch4j" />
+        <taskdef name="launch4j"
+                classname="net.sf.launch4j.ant.Launch4jTask"
+                classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+        <loadproperties srcFile="${resources.dir}/WheelEncoderGeneratorApp.properties" />
 
-        <echo message="Creating application directories..."/>
-        <mkdir dir="${dist.dir}/${Application.id}"/>
-        <mkdir dir="${dist.dir}/${Application.id}/lib"/>
-
-        <echo message="Copying jar files to zip dir..."/>
-        <copy toDir="${dist.dir}/${Application.id}/lib">
-            <fileset dir="${dist.dir}/lib">
-                <include name="*.jar"/>
-            </fileset>
-        </copy>
-
-        <echo message="Copying image icon to dist dir..."/>
+        <echo message="Copying icon and splash screen to dist dir..."/>
         <copy toDir="${dist.dir}">
-            <fileset dir="${resources_windows}">
-                <include name="${Application.id}.png"/>
+            <fileset dir="${resources.windows.dir}">
+                <include name="WheelEncoderGenerator.ico"/>
+                <include name="splash.bmp"/>
             </fileset>
         </copy>
 
-        <echo message="Creating executable with JSmooth..." />
-        <copy file="${jsmooth.file}" tofile="${jsmooth.dist}"/>
-        <exec executable="${jsmooth.exe}" dir="${resources_windows}">
-            <arg value="${jsmooth.dist}" />
-        </exec>
+        <launch4j configFile="${launch4j.config}"
+            outfile="${dist.dir}/WheelEncoderGenerator.exe"
+            jar="${dist.dir}/WheelEncoderGenerator.jar" />
         <delete file="${dist.dir}/${Application.id}.png" verbose="true" />
 
-        <echo message="Deleting zip file..."/>
-        <delete file="${dist.dir}/${Application.id}.zip" verbose="true" />
-        <echo message="Adding to archive..."/>
-        <exec executable="${zip.exe}" dir="${dist.dir}">
-                <arg line="${zip.args} ${Application.id}.zip ${Application.id}"/>
+        <exec executable="C:/Program Files/Inno Setup 5/ISCC.exe">
+            <arg value="${resources.windows.dir}/installscript.iss"/>
+            <arg value="/dMySourcePath=${dist.dir}" />
+            <arg value="/O${dist.dir}" />
+            <arg value="/dMyAppVersion=${Application.version}" />
         </exec>
-        <echo message="Done zipping" />
+
     </target>
 
     <target name="app-linux" depends="jar" description="Make a double-clickable Linux application">
