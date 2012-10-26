@@ -122,7 +122,8 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
             double x = 0; // align top
             double y = 0; // align top
             doPaint(g2D, x, y, d, Color.white);
-            ImageIO.write(bufferedImage, formatName, file);
+            // TODO catch export failures
+            boolean write = ImageIO.write(bufferedImage, formatName, file);
         }
     }
 
