@@ -1,9 +1,9 @@
 /*
  * WheelEncoderGeneratorView.java
  */
+
 package wheelencodergenerator;
 
-import com.botthoughts.AuthenticationDialog;
 import com.botthoughts.JFileFilter;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
@@ -32,128 +32,96 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import com.apple.OSXAdapter;
-//import com.botthoughts.Debug;
-import com.botthoughts.ProjectHostingClient;
-import com.botthoughts.ProjectHostingWriter;
-import com.google.gdata.client.projecthosting.ProjectHostingService;
-import com.google.gdata.data.projecthosting.IssuesEntry;
-import com.google.gdata.util.AuthenticationException;
-import com.google.gdata.util.ServiceException;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
+import com.botthoughts.UpdateChecker;
+import java.awt.Desktop;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
+import java.net.URI;
+import java.util.ArrayList;
 import javax.help.HelpSet;
 import javax.help.HelpBroker;
 import javax.help.CSH;
-import javax.swing.JButton;
-import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 /**
  * The application's main frame.
  */
 public class WheelEncoderGeneratorView extends FrameView {
 
+    private String versionFileUrl = "http://wheel-encoder-generator.googlecode.com/svn/trunk/CurrentVersion.txt";
+    private String downloadUrl = "http://code.google.com/p/wheel-encoder-generator/downloads/list";
+    private String issueUrl = "http://code.google.com/p/wheel-encoder-generator/issues/list";
     private WheelEncoder encoder;
     private File encoderFile; // TODO: Med: encapsulate in encoder?
     private JFileFilter wegFileFilter = new JFileFilter();
-    private JFileFilter pngFileFilter = new JFileFilter();
+    private JFileFilter imageFileFilter = new JFileFilter();
+    private ArrayList<JFileFilter> imageFileFilterList = new ArrayList<JFileFilter>();
     private DiameterInputVerifier numVerifier = new DiameterInputVerifier();
     private HelpSet hs;
     private HelpBroker hb;
     private CSH.DisplayHelpFromSource helpHandler;
-    private int exportWidth = 600; // persist this in a preferences file
-    private String username = ""; // for issue submission
-    private String password = ""; // for issue submission
     public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
     public static int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     public static String NEW_FILE = "";
+    private UpdateChecker updateChecker;
+    private static boolean VERBOSE=true;
+    private static boolean QUIET=false;
+    private ImageExportChooser exporter = new ImageExportChooser();
 
     // TODO: Low: implement mm/inch functionality
+
     public WheelEncoderGeneratorView(SingleFrameApplication app) {
         super(app);
 
         System.out.println("Initializing help...");
-
         // Setup help system
         hs = getHelpSet("wheelencodergenerator/resources/help/WEGHelp_en.hs");
         if (hs != null) {
             hb = hs.createHelpBroker();
             helpHandler = new CSH.DisplayHelpFromSource(hb);
         }
-
-        // Initialize windows, widgets, etc.
         System.out.println("Initializing components...");
         initComponents();
         registerForMacOSXEvents(); // OSX-specific setup
-
         // Setup file filters for weg and image files
         wegFileFilter.setDescription("Wheel Encoder Generator files (*.weg)");
         wegFileFilter.addType(".weg");
-        pngFileFilter.setDescription("PNG Images (*.png)");
-        pngFileFilter.addType(".png");
-
+        imageFileFilter.setDescription("Images (*.png, *.gif, *.jpg)");
+        imageFileFilter.addType(".png");
+        imageFileFilter.addType(".gif");
+        imageFileFilter.addType(".jpg");
+        imageFileFilterList.add( new JFileFilter("PNG file", ".png") );
+        imageFileFilterList.add( new JFileFilter("GIF file", ".gif") );
+        imageFileFilterList.add( new JFileFilter("JPEG file", ".jpg") );
         // Set taskbar / app jframe icon
         Image image = new ImageIcon(getClass().getResource("/wheelencodergenerator/resources/windows/WheelEncoderGenerator.png")).getImage();
         getFrame().setIconImage(image);
-
         // Initial "load" of new encoder
         newEncoder();
         System.out.println("Done with View initialization...");
-    }
 
-    // One by one we need to fix width of components
-    // remove them and re add them. This is a kludge and
-    // surely there is a better way...
-    public void fixButtonWidths() {
-        fixToolBar(toolBar0);
-        fixToolBar(toolBar1);
-        fixToolBar(toolBar2);
-    }
-
-    private void fixToolBar(JToolBar tb) {
-        Component componentList[];
-        int width = 0;
-        int padding = 6;
-
-        componentList = tb.getComponents();
-        //System.err.println(tb.getName());
-        for (int i = 0; i < componentList.length; i++) {
-            if (componentList[i].getClass().getName() != null
-                    && componentList[i].getClass().getName().equals("javax.swing.JButton")) {
-                JButton b = (JButton) componentList[i];
-                //System.err.println(i+" "+componentList[i].getName()+ " " + componentList[i].getClass().getName());
-                width += fixButtonWidth((JButton) componentList[i]);
-            }
-            tb.remove(componentList[i]);
+        com.botthoughts.Debug.println(Thread.currentThread().getName());
+        try {
+            updateChecker = new UpdateChecker();
+            updateChecker.setURL(versionFileUrl);
+            updateChecker.setVersion(getVersion());
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // Here, we can safely update the GUI
+                    // because we'll be called from the
+                    // event dispatch thread
+                    com.botthoughts.Debug.println(Thread.currentThread().getName());
+                    CheckThreadViolationRepaintManager.setCurrentManager(new CheckThreadViolationRepaintManager());
+                    promptUpdate(QUIET);
+                }
+            });
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Dimension d = new Dimension(width + 2 * padding, tb.getSize().height);
-        tb.setMinimumSize(d);
-        tb.setMaximumSize(d);
-        tb.setPreferredSize(d);
-        tb.setSize(d);
-        for (int i = 0; i < componentList.length; i++) {
-            tb.add(componentList[i]);
-        }
-        tb.repaint();
     }
 
-    // Automatically resets button preferred width to text width
-    // This is a huge cross-platform headache and I guess I'm too dumb
-    private int fixButtonWidth(JButton b) {
-        FontMetrics fm = b.getFontMetrics(b.getFont());
-        int height = b.getHeight();
-        int padding = 8;
-        int textWidth = fm.stringWidth(b.getText());
-        Dimension d = new Dimension(textWidth + 2 * padding, height);
-        b.setPreferredSize(d);
-        b.setMaximumSize(d);
-        b.setMinimumSize(d);
-        b.setSize(d);
-        b.repaint();
-
-        return b.getPreferredSize().width;
-    }
 
     // Generic registration with the Mac OS X application menu
     // Checks the platform, then attempts to register with the Apple EAWT
@@ -163,8 +131,8 @@ public class WheelEncoderGeneratorView extends FrameView {
             try {
                 // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
                 // use as delegates for various com.apple.eawt.ApplicationListener methods
-                OSXAdapter.setQuitHandler(this, getClass().getDeclaredMethod("quit", (Class[]) null));
-                OSXAdapter.setAboutHandler(this, getClass().getDeclaredMethod("about", (Class[]) null));
+                OSXAdapter.setQuitHandler(this, getClass().getDeclaredMethod("quit", (Class[])null));
+                OSXAdapter.setAboutHandler(this, getClass().getDeclaredMethod("about", (Class[])null));
                 //OSXAdapter.setPreferencesHandler(this, getClass().getDeclaredMethod("preferences", (Class[])null));
                 //OSXAdapter.setFileHandler(this, getClass().getDeclaredMethod("loadImageFile", new Class[] { String.class }));
             } catch (Exception e) {
@@ -173,32 +141,37 @@ public class WheelEncoderGeneratorView extends FrameView {
         }
     }
 
-    /**
-     * find the helpset file and create a HelpSet object
-     */
+   /**
+    * find the helpset file and create a HelpSet object
+    */
     private HelpSet getHelpSet(String helpsetfile) {
         HelpSet myHS = null;
         ClassLoader cl = this.getClass().getClassLoader();
         try {
             URL hsURL = HelpSet.findHelpSet(cl, helpsetfile);
             myHS = new HelpSet(null, hsURL);
-        } catch (Exception ee) {
-            System.out.println("HelpSet: " + ee.getMessage());
-            System.out.println("HelpSet: " + helpsetfile + " not found");
+        } catch(Exception ee) {
+            System.out.println("HelpSet: "+ee.getMessage());
+            System.out.println("HelpSet: "+ helpsetfile + " not found");
         }
         return myHS;
+    }
+
+    public final String getVersion() {
+        return getResourceMap().getString("Application.version");
     }
 
     /*
     public final void setTaskBarIcon()
     {
-    JFrame mainFrame = this.getFrame();//WheelEncoderGeneratorApp.getApplication().getMainFrame();
-    Debug.println("image: "+Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
-    mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
+        JFrame mainFrame = this.getFrame();//WheelEncoderGeneratorApp.getApplication().getMainFrame();
+        Debug.println("image: "+Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
+        mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
     }
      * 
      */
-    /** This method is called from within the constructor to
+
+     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
@@ -245,9 +218,11 @@ public class WheelEncoderGeneratorView extends FrameView {
         exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         helpMenuItem = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
+        updateMenuItem = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        reportMenuItem = new javax.swing.JMenuItem();
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         toolBar0 = new javax.swing.JToolBar();
@@ -295,7 +270,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 435, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -577,7 +552,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                     .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -690,11 +665,6 @@ public class WheelEncoderGeneratorView extends FrameView {
         }
         helpMenuItem.addActionListener(helpHandler);
 
-        jMenuItem1.setAction(actionMap.get("submitIssue")); // NOI18N
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        helpMenu.add(jMenuItem1);
-
         jSeparator4.setName("jSeparator4"); // NOI18N
         if (!MAC_OS_X) {
             helpMenu.add(jSeparator4);
@@ -708,6 +678,27 @@ public class WheelEncoderGeneratorView extends FrameView {
             aboutMenuItem.setMnemonic(KeyEvent.VK_A);
             helpMenu.add(aboutMenuItem);
         }
+
+        updateMenuItem.setText(resourceMap.getString("updateMenuItem.text")); // NOI18N
+        updateMenuItem.setName("updateMenuItem"); // NOI18N
+        updateMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(updateMenuItem);
+
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        helpMenu.add(jSeparator5);
+
+        reportMenuItem.setText(resourceMap.getString("reportMenuItem.text")); // NOI18N
+        reportMenuItem.setName("reportMenuItem"); // NOI18N
+        reportMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(reportMenuItem);
 
         if(!MAC_OS_X) {
             helpMenu.setMnemonic(KeyEvent.VK_H);
@@ -727,9 +718,9 @@ public class WheelEncoderGeneratorView extends FrameView {
         newButton.setFocusable(false);
         newButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         newButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        newButton.setMinimumSize(new java.awt.Dimension(50, 50));
+        newButton.setMinimumSize(new java.awt.Dimension(32, 50));
         newButton.setName("newButton"); // NOI18N
-        newButton.setPreferredSize(new java.awt.Dimension(50, 50));
+        newButton.setPreferredSize(new java.awt.Dimension(32, 50));
         newButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar0.add(newButton);
 
@@ -741,16 +732,17 @@ public class WheelEncoderGeneratorView extends FrameView {
         openButton.setFocusable(false);
         openButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         openButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        openButton.setMinimumSize(new java.awt.Dimension(50, 50));
+        openButton.setMinimumSize(new java.awt.Dimension(32, 50));
         openButton.setName("openButton"); // NOI18N
-        openButton.setPreferredSize(new java.awt.Dimension(60, 50));
+        openButton.setPreferredSize(new java.awt.Dimension(32, 50));
         openButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar0.add(openButton);
 
         toolBar1.setRollover(true);
-        toolBar1.setMaximumSize(new java.awt.Dimension(180, 54));
+        toolBar1.setMaximumSize(new java.awt.Dimension(170, 54));
         toolBar1.setMinimumSize(new java.awt.Dimension(130, 54));
         toolBar1.setName("toolBar1"); // NOI18N
+        toolBar1.setPreferredSize(new java.awt.Dimension(130, 54));
 
         saveButton.setAction(actionMap.get("saveEncoder")); // NOI18N
         saveButton.setIcon(resourceMap.getIcon("saveButton.icon")); // NOI18N
@@ -760,7 +752,7 @@ public class WheelEncoderGeneratorView extends FrameView {
         saveButton.setFocusable(false);
         saveButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         saveButton.setMaximumSize(new java.awt.Dimension(50, 50));
-        saveButton.setMinimumSize(new java.awt.Dimension(40, 50));
+        saveButton.setMinimumSize(new java.awt.Dimension(32, 50));
         saveButton.setName("saveButton"); // NOI18N
         saveButton.setPreferredSize(new java.awt.Dimension(32, 50));
         saveButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -797,7 +789,6 @@ public class WheelEncoderGeneratorView extends FrameView {
         toolBar0.add(toolBar1);
 
         toolBar2.setRollover(true);
-        toolBar2.setMaximumSize(new java.awt.Dimension(60, 52));
         toolBar2.setName("toolBar2"); // NOI18N
 
         printButton.setAction(actionMap.get("printEncoder")); // NOI18N
@@ -807,10 +798,10 @@ public class WheelEncoderGeneratorView extends FrameView {
         printButton.setBorderPainted(false);
         printButton.setFocusable(false);
         printButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        printButton.setMaximumSize(new java.awt.Dimension(40, 50));
+        printButton.setMaximumSize(new java.awt.Dimension(50, 50));
         printButton.setMinimumSize(new java.awt.Dimension(32, 50));
         printButton.setName("printButton"); // NOI18N
-        printButton.setPreferredSize(new java.awt.Dimension(40, 50));
+        printButton.setPreferredSize(new java.awt.Dimension(32, 50));
         printButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar2.add(printButton);
 
@@ -912,17 +903,35 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         // This action handler is only called by non-Mac Exit menu item
-        if (promptSaveFirst()) {
+        if (promptSaveFirst())
             System.exit(0);
-        }
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void invertCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_invertCheckBoxItemStateChanged
         showPreview();
     }//GEN-LAST:event_invertCheckBoxItemStateChanged
 
-    private class DiameterInputVerifier extends InputVerifier {
+    private void updateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMenuItemActionPerformed
+        promptUpdate(VERBOSE);
+    }//GEN-LAST:event_updateMenuItemActionPerformed
 
+    private void reportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportMenuItemActionPerformed
+        try {
+            if (Desktop.isDesktopSupported()) {
+                URI uri = URI.create(issueUrl);
+                Desktop.getDesktop().browse(uri);
+            } else {
+                JOptionPane.showMessageDialog(null, "To report a problem, visit the Issues URL:\n" + issueUrl,
+                        "Oops", JOptionPane.OK_OPTION);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_reportMenuItemActionPerformed
+
+    
+    private class DiameterInputVerifier extends InputVerifier {
+        @Override
         public boolean verify(JComponent input) {
             boolean outcome = false;
             JTextField textField = (JTextField) input;
@@ -937,14 +946,13 @@ public class WheelEncoderGeneratorView extends FrameView {
                 outcome = false;
             }
 
-            if (outcome == false) {
+            if (outcome == false)
                 input.setForeground(Color.red);
-            } else {
+            else
                 input.setForeground(Color.black);
-            }
 
             guiErrorController(outcome);
-
+            
             return outcome;
         }
     }
@@ -954,7 +962,8 @@ public class WheelEncoderGeneratorView extends FrameView {
      * Set up the GUI to reflect the settings in the WheelEncoder object
      * Used for loading or opening new encoder.
      */
-    private void setWheelEncoder(WheelEncoder e) {
+    private void setWheelEncoder(WheelEncoder e)
+    {
         encoder = e;
         // Setup all the interface stuff based on contents of the
         // encoder object
@@ -965,22 +974,25 @@ public class WheelEncoderGeneratorView extends FrameView {
             quadratureCheckBox.setSelected(encoder.hasQuadratureTrack());
             indexCheckBox.setSelected(encoder.hasIndexTrack());
             encoderTabbedPane.setSelectedIndex(encoderTabbedPane.indexOfTab("Incremental"));
-        } else if (encoder.getType() == WheelEncoder.ABSOLUTE) {
+        }
+        else if (encoder.getType() == WheelEncoder.ABSOLUTE) {
             encoderTabbedPane.setSelectedIndex(encoderTabbedPane.indexOfTab("Absolute"));
             if (encoder.getNumbering() == WheelEncoder.GRAY) {
                 grayCodeRadioButton.setSelected(true);
-            } else if (encoder.getNumbering() == WheelEncoder.BINARY) {
+            }
+            else if (encoder.getNumbering() == WheelEncoder.BINARY) {
                 binaryCodeRadioButton.setSelected(true);
             }
-            absoluteResolutionComboBox.setSelectedIndex(encoder.getResolution() - 1);
+            absoluteResolutionComboBox.setSelectedIndex(encoder.getResolution()-1);
         }
     }
 
-    private boolean errorCheck() {
-        boolean result = true;
-
+    private boolean errorCheck()
+    {
+        boolean result=true;
+        
         try {
-            if (Integer.parseInt(innerDiameter.getText()) >= Integer.parseInt(outerDiameter.getText())) {
+            if ( Integer.parseInt(innerDiameter.getText()) >= Integer.parseInt(outerDiameter.getText()) ) {
                 outerDiameter.setForeground(Color.red);
                 innerDiameter.setForeground(Color.red);
                 result = false;
@@ -988,9 +1000,9 @@ public class WheelEncoderGeneratorView extends FrameView {
                 outerDiameter.setForeground(Color.black);
                 innerDiameter.setForeground(Color.black);
             }
-            // Is width even (ok), or odd (not ok) ?
+            // Is resolution even (ok), or odd (not ok) ?
             int i = Integer.parseInt(resolutionSpinner.getModel().getValue().toString());
-            if ((i % 2) > 0) {
+            if ( (i % 2) > 0 ) {
                 i++; // just fix it (note that we can never get Maximum+1 so we can get away with increment
                 resolutionSpinner.getModel().setValue(i);
             }
@@ -999,7 +1011,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             // Already covered by an InputVerifier, but what the heck.
             JOptionPane.showMessageDialog(getFrame(),
                     "Error parsing numeric input", "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE );
         }
 
         // Disable functionality (print, etc) if something is jacked up
@@ -1013,7 +1025,8 @@ public class WheelEncoderGeneratorView extends FrameView {
      * If there's an error this can be used to disable a bunch of interface
      * elements (save, save as, etc.  Or re-enable if error is gone.
      */
-    private void guiErrorController(boolean result) {
+    private void guiErrorController(boolean result)
+    {
         printMenuItem.setEnabled(result);
         printButton.setEnabled(result);
         saveAsMenuItem.setEnabled(result);
@@ -1028,7 +1041,8 @@ public class WheelEncoderGeneratorView extends FrameView {
         openButton.setEnabled(result);
     }
 
-    public void showPreview() {
+    public void showPreview()
+    {
         if (errorCheck()) {
             encoder.setInnerDiameter(Integer.parseInt(innerDiameter.getText()));
             encoder.setOuterDiameter(Integer.parseInt(outerDiameter.getText()));
@@ -1037,16 +1051,16 @@ public class WheelEncoderGeneratorView extends FrameView {
             // Absolute Encoder
             if (encoderTabbedPane.getSelectedIndex() == encoderTabbedPane.indexOfTab("Absolute")) {
                 encoder.setType(WheelEncoder.ABSOLUTE);
-                if (grayCodeRadioButton.isSelected() == true) {
+                if (grayCodeRadioButton.isSelected() == true)
                     encoder.setNumbering(WheelEncoder.GRAY);
-                } else if (binaryCodeRadioButton.isSelected() == true) {
+                else if (binaryCodeRadioButton.isSelected() == true)
                     encoder.setNumbering(WheelEncoder.BINARY);
-                }
 
                 // ComboBox menu is set up so that # of tracks corresponds to selected index + 1
-                encoder.setResolution(absoluteResolutionComboBox.getSelectedIndex() + 1);
+                encoder.setResolution(absoluteResolutionComboBox.getSelectedIndex()+1);
                 //System.out.println("Track count: " + Integer.toString(encoder.getResolution()) + "\n");
-            } else if (encoderTabbedPane.getSelectedIndex() == encoderTabbedPane.indexOfTab("Incremental")) {
+            }
+            else if (encoderTabbedPane.getSelectedIndex() == encoderTabbedPane.indexOfTab("Incremental")) {
                 encoder.setType(WheelEncoder.STANDARD);
                 encoder.setResolution(Integer.parseInt(resolutionSpinner.getModel().getValue().toString()));
             }
@@ -1066,25 +1080,27 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     }
 
+ 
     /* setFile()
      * 
      * Sets the encoderFile attribute and the titlebar
      */
-    private void setEncoderFile(File file) {
+    private void setEncoderFile(File file)
+    {
         String theTitle;
         encoderFile = file;
-        if (file == null || file.getName().equals(NEW_FILE)) {
+        if (file == null || file.getName().equals(NEW_FILE))
             theTitle = "Untitled.weg";
-        } else {
+        else
             theTitle = file.getName();
-        }
-        if (!MAC_OS_X) {
+        if (!MAC_OS_X)
             theTitle += " - " + appTitle;
-        }
         getFrame().setTitle(theTitle);
     }
 
-    private String getFilename() {
+
+    private String getFilename()
+    {
         String filename = "Untitled";
         if (encoderFile != null) {
             filename = encoderFile.getName();
@@ -1101,21 +1117,24 @@ public class WheelEncoderGeneratorView extends FrameView {
      *   Discard -> true
      *   No -> false
      */
-    private boolean promptSaveFirst() {
-        boolean result = true;
+    private boolean promptSaveFirst()
+    {
+        boolean result=true;
 
+        System.out.println("promptSaveFirst(): enter");
+        com.botthoughts.Debug.println(Thread.currentThread().getName());
+        
         if (encoder != null) { // null if first time through
             if (encoder.isChanged()) {
                 int response = JOptionPane.showConfirmDialog(getFrame(),
-                        "The encoder " + getFilename() + " has changed. Save the changes?", "Save?",
-                        JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
-                if (response == JOptionPane.YES_OPTION) {
+                    "The encoder " + getFilename() + " has changed. Save the changes?", "Save?",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE );
+                if (response == JOptionPane.YES_OPTION) {                    
                     if (encoderFile.getName().equals(NEW_FILE)) {
                         File newFile = promptFileSave(encoderFile, wegFileFilter);
-                        if (newFile != null) {
+                        if (newFile != null)
                             setEncoderFile(newFile);
-                        }
                     }
                     // By now we should have encoderFile set to something useful
                     // so the result of this operation should set the result for quit()
@@ -1131,10 +1150,45 @@ public class WheelEncoderGeneratorView extends FrameView {
                 }
             }
         }
-        System.out.println("promptSaveFirst() -- return " + Boolean.toString(result));
+        System.out.println("promptSaveFirst() -- return "+Boolean.toString(result));
         return result;
     }
 
+    /** check for updated version and prompt user if so
+     * 
+     */
+    private void promptUpdate(boolean verbose) {
+        if (updateChecker.checkUpdate()) {
+            Object[] options = {"Download", "Skip"};
+            JOptionPane pane = new JOptionPane();
+            pane.setOptions(options);
+            pane.setInitialSelectionValue(options[0]);
+            pane.setOptionType(JOptionPane.YES_NO_OPTION);
+            pane.setMessage("An updated version (" + 
+                    updateChecker.getCurrentVersion() +
+                    ") of this software\nis available. Download?");
+            pane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+            JDialog dialog = pane.createDialog(null, "Update Available");
+            dialog.setVisible(true);
+            Object selectedValue = pane.getValue();
+            if (selectedValue.equals(options[0])) {
+                // Launch your default web browser with ...
+                try {
+                    if (Desktop.isDesktopSupported()) {
+                        URI uri = URI.create(downloadUrl);
+                        Desktop.getDesktop().browse(uri);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "To update, visit the download URL:\n" + downloadUrl,
+                                "Oops", JOptionPane.OK_OPTION);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if (verbose) {
+            JOptionPane.showMessageDialog(null, "Wheel Encoder Generator is up to date!", "Updated", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
     /* promptFileSave()
      * 
@@ -1144,39 +1198,19 @@ public class WheelEncoderGeneratorView extends FrameView {
      */
     private File promptFileSave(File defaultFile, JFileFilter ff) {
         File file = null;
-        int option;
 
         JFileChooser fc = new JFileChooser();
-
         fc.setFileFilter(ff);
+
         if (defaultFile == null || defaultFile.getName().equals(NEW_FILE)) {
             fc.setSelectedFile(new File("Untitled.weg"));
         } else {
             fc.setSelectedFile(defaultFile);
         }
-        option = fc.showSaveDialog(getFrame());
-        File f = fc.getSelectedFile();
 
-        if (option == JFileChooser.APPROVE_OPTION) {
-            file = f;
-            // Auto append extension, but only on Windows
-            // on Mac, just prompt user if file extension is wrong
-            //
-            if (ff.accept(f) == false) {
-                if (MAC_OS_X) {
-                    int response = JOptionPane.showConfirmDialog(getFrame(),
-                            "File " + f.getName() + " is not of type: " + ff.getDescription()
-                            + ".  Ok to proceed?", "Unrecognized file type",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
-                    if (response == JOptionPane.NO_OPTION) {
-                        file = null;
-                    }
-                } else {
-                    file = new File(f.getParent(), f.getName() + ff.getExtension());
-                    System.out.println("Auto append extension, now: " + file.getName());
-                }
-            }
+        if (fc.showSaveDialog(getFrame()) == JFileChooser.APPROVE_OPTION) {
+            file = fc.getSelectedFile().getAbsoluteFile();
+            System.out.println("promptFileSave(): Selected File: "+file.getName());
         }
 
         return file;
@@ -1190,23 +1224,26 @@ public class WheelEncoderGeneratorView extends FrameView {
      * If by some chance the file is null, hopefully encoder.save()
      * will throw an exception
      */
-    private boolean doSave(File file) {
+    private boolean doSave(File file)
+    {
         boolean outcome = true;
 
         try {
             encoder.save(file);
             showPreview();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             outcome = false;
             JOptionPane.showMessageDialog(getFrame(),
-                    "Error saving file", "File Save Error: " + e.getMessage(),
-                    JOptionPane.ERROR_MESSAGE);
+                "Error saving file", "File Save Error: "+e.getMessage(),
+                JOptionPane.ERROR_MESSAGE );
         }
-
+        
         return outcome;
     }
 
-    private boolean doOpen() {
+    private boolean doOpen()
+    {
         boolean outcome = false;
         JFileChooser fc = new JFileChooser();
         fc.setFileFilter(wegFileFilter);
@@ -1223,8 +1260,8 @@ public class WheelEncoderGeneratorView extends FrameView {
                 outcome = true;
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(getFrame(),
-                        "Error reading file", "File Read Error",
-                        JOptionPane.ERROR_MESSAGE);
+                    "Error reading file", "File Read Error",
+                    JOptionPane.ERROR_MESSAGE );
                 outcome = false;
             }
         } else {
@@ -1250,9 +1287,8 @@ public class WheelEncoderGeneratorView extends FrameView {
     public void saveEncoder() {
         if (encoderFile.getName().equals(NEW_FILE)) {
             File newFile = promptFileSave(encoderFile, wegFileFilter);
-            if (newFile != null && doSave(newFile)) {
+            if (newFile != null && doSave(newFile))
                 setEncoderFile(newFile);
-            }
         } else {
             doSave(encoderFile);
         }
@@ -1270,9 +1306,8 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     @Action
     public void openEncoder() {
-        if (promptSaveFirst()) {
+        if (promptSaveFirst())
             doOpen();
-        }
     }
 
     @Action
@@ -1285,7 +1320,6 @@ public class WheelEncoderGeneratorView extends FrameView {
                 job.print();
             } catch (PrinterException e) {
                 // The job did not successfully complete
-                System.err.println(">>> Printer error: " + e.getMessage());
             }
         }
 
@@ -1293,43 +1327,25 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     @Action
     public void exportEncoder() {
-        boolean error = false;
-
-        //ExportDialog exportDialog = new ExportDialog(mainFrame, true);
-        //exportDialog.setVisible(true);
-
-        do {
-            String s = (String) JOptionPane.showInputDialog(
-                    getFrame(),
-                    "Image width in pixels:\n",
-                    "Export Dialog",
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    null,
-                    exportWidth);
-
-            if (s == null) {
-                return;
-            }
-
+        int option = ImageExportChooser.showDialog(this.getFrame());
+        if (option == ImageExportChooser.APPROVE_OPTION) {
             try {
-                exportWidth = Integer.parseInt(s);
-                //System.out.println("Width = "+width);
-                error = exportWidth < 1;
-            } catch (NumberFormatException e) {
-                error = true;
+                File f = exporter.getSelectedFile();
+                int response = JOptionPane.YES_OPTION;
+                if (f.exists()) {
+                    response = JOptionPane.showConfirmDialog(getFrame(),
+                        "File "+f.getName()+" exists. Replace?", "File exists",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE );
+                }
+                if (response == JOptionPane.YES_OPTION) {
+                    encoderPanel.export(ImageExportChooser.getSelectedFile(), ImageExportChooser.getSelectedFileType(), ImageExportChooser.getSelectedResolution());
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (error);
-
-        File image = promptFileSave(new File("Untitled.png"), pngFileFilter);
-        if (image != null) {
-            try {
-                encoderPanel.export(image, "png", exportWidth);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(getFrame(),
-                        "Error exporting image file", "File Export Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+        } else {
+            System.out.println("exportEncoder(): CANCEL");
         }
     }
 
@@ -1339,7 +1355,7 @@ public class WheelEncoderGeneratorView extends FrameView {
 
     @Action
     public void about() {
-        //System.out.println("about() -- enter");
+        System.out.println("about() -- enter");
         if (aboutBox == null) {
             JFrame mainFrame = WheelEncoderGeneratorApp.getApplication().getMainFrame();
             aboutBox = new WheelEncoderGeneratorAboutBox(mainFrame);
@@ -1347,95 +1363,7 @@ public class WheelEncoderGeneratorView extends FrameView {
             aboutBox.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         }
         WheelEncoderGeneratorApp.getApplication().show(aboutBox);
-        //System.out.println("about() -- exit");
-    }
-
-    @Action
-    public void submitIssue() throws MalformedURLException {
-        JFrame mainFrame = WheelEncoderGeneratorApp.getApplication().getMainFrame();
-        ProjectHostingWriter writer = null;
-        String project = "wheel-encoder-generator";
-        // TODO: retrieve application version
-        ProjectHostingService myService = new ProjectHostingService("com.botthoughts-WheelEncoderGenerator-0.1b");
-        IssuesEntry issueInserted = null;
-        
-        if (issueDialog == null) {
-            issueDialog = new IssueDialog(mainFrame, "Submit Issue");
-            issueDialog.setLocationRelativeTo(mainFrame);
-            issueDialog.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        }
-        if (authDialog == null) {
-            authDialog = new AuthenticationDialog(mainFrame, "Google Authentication");
-            authDialog.setLocationRelativeTo(mainFrame);
-            authDialog.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        }
-
-        // Repeat the login sequence if authentication failed.
-        // if the user cancels, drop out.
-        do {
-            // First, authenticate the user
-            if (this.username.equals("") || this.password.equals("")) {
-                authDialog.setVisible(true);
-                if (authDialog.getAnswer() == AuthenticationDialog.CANCEL_OPTION) {
-                    // TODO: should make sure authn failed error is disabled next time around if we failed last time.
-                    return;
-                } else {
-                    this.username = authDialog.getUsername();
-                    this.password = authDialog.getPassword();
-                }
-            }
-
-            // Now try to login
-            try {
-                writer = new ProjectHostingWriter(myService, project, username, password);
-            } catch (AuthenticationException e) {
-                // do something
-                System.err.println("Authentication Exception " + e);
-                this.password = "";
-                authDialog.setFailed(true);
-            } catch (MalformedURLException e) {
-                // do something
-                System.err.println("Malformed URL Exception " + e);
-                return;
-            }
-        }  while (password.equals(""));
-        
-        // If we're logged in, now prompt user for issue text
-        WheelEncoderGeneratorApp.getApplication().show(issueDialog);
-        System.out.println("issueDialog has been shown");
-        if (issueDialog.answer == IssueDialog.CANCEL_OPTION) {
-            return;
-        }
-        String type = issueDialog.getType();
-        String summary = issueDialog.getSummary();
-        String description = issueDialog.getDescription();
-        try {
-            if (writer != null) {
-                issueInserted = writer.makeNewIssue(type, summary, description);
-            } else {
-                // do something
-                return;
-            }
-        } catch (ServiceException e) {
-            // do something
-            System.err.println("Service Exception " + e);
-            return;
-        } catch (IOException e) {
-            // do something
-            System.err.println("IO Exception " + e);
-            return;
-        }
-
-        // Notify user of submission
-        JOptionPane.showMessageDialog(getFrame(),
-                "Issue submitted successfully. Thank you!",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
-
-//        System.err.println("type: " + type);
-//        System.err.println("summary: " + summary);
-//        System.err.println("description: " + description);
-
+        System.out.println("about() -- exit");
     }
 
     /* Handles OSX quit menu as well as window close (cross platform)
@@ -1447,13 +1375,15 @@ public class WheelEncoderGeneratorView extends FrameView {
      * Calls promptSaveFirst() to check if file needs saving,
      * returns boolean true if ok to proceed; false otherwise
      */
-    public boolean quit() {
+    public boolean quit()
+    {
         return promptSaveFirst();
     }
 
     @Action
     public void help() {
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel absolutePanel;
     private javax.swing.JComboBox absoluteResolutionComboBox;
@@ -1475,11 +1405,11 @@ public class WheelEncoderGeneratorView extends FrameView {
     private javax.swing.JTextField innerDiameter;
     private javax.swing.JLabel innerDiameterLabel;
     private javax.swing.JCheckBox invertCheckBox;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JRadioButton mmButton;
@@ -1493,6 +1423,7 @@ public class WheelEncoderGeneratorView extends FrameView {
     private javax.swing.JButton printButton;
     private javax.swing.JMenuItem printMenuItem;
     private javax.swing.JCheckBox quadratureCheckBox;
+    private javax.swing.JMenuItem reportMenuItem;
     private javax.swing.JLabel resolutionLabel1;
     private javax.swing.JLabel resolutionLabel2;
     private javax.swing.JSpinner resolutionSpinner;
@@ -1507,10 +1438,10 @@ public class WheelEncoderGeneratorView extends FrameView {
     private javax.swing.JToolBar toolBar0;
     private javax.swing.JToolBar toolBar1;
     private javax.swing.JToolBar toolBar2;
+    private javax.swing.JMenuItem updateMenuItem;
     // End of variables declaration//GEN-END:variables
+
     private SpinnerNumberModel resolutionSpinnerModel = new SpinnerNumberModel(16, 4, 36000, 2);
     private String appTitle = org.jdesktop.application.Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext().getResourceMap(WheelEncoderGeneratorApp.class).getString("Application.title");
     private JDialog aboutBox;
-    private IssueDialog issueDialog;
-    private AuthenticationDialog authDialog;
 }
