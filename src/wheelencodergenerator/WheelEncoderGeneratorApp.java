@@ -21,21 +21,23 @@ public class WheelEncoderGeneratorApp extends SingleFrameApplication implements 
     @Override protected void startup() {
         addExitListener(this);
         com.botthoughts.Debug.println("added exit listener.");
+        com.botthoughts.Debug.println(Thread.currentThread().getName());
         show(view = new WheelEncoderGeneratorView(this));
         //getMainFrame().setIconImage(Toolkit.getDefaultToolkit().getImage("wheelencodergenerator/resources/WheelEncoderGenerator.ico"));
         //view.setTaskBarIcon();
-        view.fixButtonWidths();
+        //view.fixButtonWidths();
     }
 
     @Override public boolean canExit(java.util.EventObject e) {
         com.botthoughts.Debug.println("calling appView.quit()");
+        com.botthoughts.Debug.println(Thread.currentThread().getName());
         return view.quit();
     }
 
     @Override public void willExit(java.util.EventObject e) {
     }
- 
-    
+
+
     /**
      * This method is to initialize the specified window by injecting resources.
      * Windows shown in our application come fully initialized from the GUI
@@ -63,6 +65,9 @@ public class WheelEncoderGeneratorApp extends SingleFrameApplication implements 
         System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
         System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
         System.out.println("launching app...");
+        com.botthoughts.Debug.println(Thread.currentThread().getName());
+        System.out.println("main() launching...");
         launch(WheelEncoderGeneratorApp.class, args);
+
     }
 }
