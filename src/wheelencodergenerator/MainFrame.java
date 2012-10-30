@@ -54,9 +54,11 @@ import javax.swing.SwingUtilities;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    // TODO: make these URLs properties
     private String versionFileUrl = "http://wheel-encoder-generator.googlecode.com/svn/trunk/CurrentVersion.txt";
     private String downloadUrl = "http://code.google.com/p/wheel-encoder-generator/downloads/list";
     private String issueUrl = "http://code.google.com/p/wheel-encoder-generator/issues/list";
+    private String donateUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LYEDDNUM7X6H6";
     private WheelEncoder encoder;
     private File encoderFile; // TODO: Med: encapsulate in encoder?
     private JFileFilter wegFileFilter = new JFileFilter();
@@ -66,7 +68,7 @@ public class MainFrame extends javax.swing.JFrame {
     private HelpSet hs;
     private HelpBroker hb;
     private CSH.DisplayHelpFromSource helpHandler;
-    public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
+    public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x")); // TODO: use OperatingSystemValidator
     public static int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     public static String NEW_FILE = "";
     private UpdateChecker updateChecker;
@@ -183,6 +185,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        codeButtonGroup = new javax.swing.ButtonGroup();
         toolBar = new javax.swing.JToolBar();
         newButton = new javax.swing.JButton();
         openButton = new javax.swing.JButton();
@@ -232,6 +235,7 @@ public class MainFrame extends javax.swing.JFrame {
         updateMenuItem = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         reportMenuItem = new javax.swing.JMenuItem();
+        donateMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("Form"); // NOI18N
@@ -346,7 +350,6 @@ public class MainFrame extends javax.swing.JFrame {
         mainPanel.setLayout(new java.awt.GridBagLayout());
 
         encoderPanel.setBackground(resourceMap.getColor("encoderPanel.background")); // NOI18N
-        encoderPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder(resourceMap.getColor("encoderPanel.border.highlightColor"), null)); // NOI18N
         encoderPanel.setToolTipText(resourceMap.getString("encoderPanel.toolTipText")); // NOI18N
         encoderPanel.setMinimumSize(new java.awt.Dimension(350, 350));
         encoderPanel.setName("encoderPanel"); // NOI18N
@@ -362,11 +365,11 @@ public class MainFrame extends javax.swing.JFrame {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 346, Short.MAX_VALUE)
+            .addGap(0, 350, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 351, Short.MAX_VALUE)
+            .addGap(0, 355, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -376,8 +379,10 @@ public class MainFrame extends javax.swing.JFrame {
         mainPanel.add(encoderPanel, gridBagConstraints);
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
+        controlPanel.setMaximumSize(new java.awt.Dimension(220, 355));
+        controlPanel.setMinimumSize(new java.awt.Dimension(220, 355));
         controlPanel.setName("controlPanel"); // NOI18N
-        controlPanel.setLayout(new java.awt.BorderLayout());
+        controlPanel.setLayout(new java.awt.GridBagLayout());
 
         encoderTabbedPane.setToolTipText(resourceMap.getString("encoderTabbedPane.toolTipText")); // NOI18N
         encoderTabbedPane.setName("encoderTabbedPane"); // NOI18N
@@ -387,6 +392,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        standardPanel.setMaximumSize(new java.awt.Dimension(131, 96));
         standardPanel.setName("standardPanel"); // NOI18N
         standardPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -396,26 +402,27 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 8);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
         standardPanel.add(resolutionLabel1, gridBagConstraints);
 
         resolutionSpinner.setModel((SpinnerModel) resolutionSpinnerModel);
         resolutionSpinner.setToolTipText(resourceMap.getString("resolutionSpinner.toolTipText")); // NOI18N
-        resolutionSpinner.setMinimumSize(null);
+        resolutionSpinner.setMaximumSize(new java.awt.Dimension(37, 20));
+        resolutionSpinner.setMinimumSize(new java.awt.Dimension(37, 20));
         resolutionSpinner.setName("resolutionSpinner"); // NOI18N
-        resolutionSpinner.setPreferredSize(null);
+        resolutionSpinner.setPreferredSize(new java.awt.Dimension(37, 20));
         resolutionSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 resolutionSpinnerStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 10);
         standardPanel.add(resolutionSpinner, gridBagConstraints);
 
         quadratureCheckBox.setText(resourceMap.getString("quadratureCheckBox.text")); // NOI18N
@@ -429,9 +436,9 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         standardPanel.add(quadratureCheckBox, gridBagConstraints);
 
         indexCheckBox.setText(resourceMap.getString("indexCheckBox.text")); // NOI18N
@@ -445,9 +452,9 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
         standardPanel.add(indexCheckBox, gridBagConstraints);
 
         encoderTabbedPane.addTab(resourceMap.getString("standardPanel.TabConstraints.tabTitle"), null, standardPanel, resourceMap.getString("standardPanel.TabConstraints.tabToolTip")); // NOI18N
@@ -455,6 +462,7 @@ public class MainFrame extends javax.swing.JFrame {
         absolutePanel.setName("absolutePanel"); // NOI18N
         absolutePanel.setLayout(new java.awt.GridBagLayout());
 
+        codeButtonGroup.add(grayCodeRadioButton);
         grayCodeRadioButton.setSelected(true);
         grayCodeRadioButton.setText(resourceMap.getString("grayCodeRadioButton.text")); // NOI18N
         grayCodeRadioButton.setToolTipText(resourceMap.getString("grayCodeRadioButton.toolTipText")); // NOI18N
@@ -465,14 +473,15 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         absolutePanel.add(grayCodeRadioButton, gridBagConstraints);
 
+        codeButtonGroup.add(binaryCodeRadioButton);
         binaryCodeRadioButton.setText(resourceMap.getString("binaryCodeRadioButton.text")); // NOI18N
         binaryCodeRadioButton.setToolTipText(resourceMap.getString("binaryCodeRadioButton.toolTipText")); // NOI18N
         binaryCodeRadioButton.setName("binaryCodeRadioButton"); // NOI18N
@@ -482,8 +491,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
@@ -496,15 +505,16 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 8);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
         absolutePanel.add(resolutionLabel2, gridBagConstraints);
 
         absoluteResolutionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096" }));
         absoluteResolutionComboBox.setSelectedIndex(3);
         absoluteResolutionComboBox.setToolTipText(resourceMap.getString("absoluteResolutionComboBox.toolTipText")); // NOI18N
-        absoluteResolutionComboBox.setMinimumSize(null);
+        absoluteResolutionComboBox.setMaximumSize(new java.awt.Dimension(60, 20));
+        absoluteResolutionComboBox.setMinimumSize(new java.awt.Dimension(60, 20));
         absoluteResolutionComboBox.setName("absoluteResolutionComboBox"); // NOI18N
-        absoluteResolutionComboBox.setPreferredSize(null);
+        absoluteResolutionComboBox.setPreferredSize(new java.awt.Dimension(60, 20));
         absoluteResolutionComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 absoluteResolutionComboBoxItemStateChanged(evt);
@@ -514,12 +524,14 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 6, 10, 15);
         absolutePanel.add(absoluteResolutionComboBox, gridBagConstraints);
 
         encoderTabbedPane.addTab(resourceMap.getString("absolutePanel.TabConstraints.tabTitle"), null, absolutePanel, resourceMap.getString("absolutePanel.TabConstraints.tabToolTip")); // NOI18N
 
-        controlPanel.add(encoderTabbedPane, java.awt.BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        controlPanel.add(encoderTabbedPane, gridBagConstraints);
 
         diameterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("diameterPanel.border.title"))); // NOI18N
         diameterPanel.setName("diameterPanel"); // NOI18N
@@ -531,7 +543,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
         diameterPanel.add(innerDiameterLabel, gridBagConstraints);
 
         innerDiameter.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -560,7 +572,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 5, 0);
         diameterPanel.add(outerDiameterLabel, gridBagConstraints);
 
         outerDiameter.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -589,7 +601,7 @@ public class MainFrame extends javax.swing.JFrame {
         mmButton.setName("mmButton"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
         diameterPanel.add(mmButton, gridBagConstraints);
 
@@ -599,12 +611,15 @@ public class MainFrame extends javax.swing.JFrame {
         inchButton.setName("inchButton"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 0);
         diameterPanel.add(inchButton, gridBagConstraints);
 
-        controlPanel.add(diameterPanel, java.awt.BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        controlPanel.add(diameterPanel, gridBagConstraints);
 
         otherPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("otherPanel.border.title"))); // NOI18N
         otherPanel.setName("otherPanel"); // NOI18N
@@ -622,11 +637,13 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 46, 10, 47);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         otherPanel.add(invertCheckBox, gridBagConstraints);
 
-        controlPanel.add(otherPanel, java.awt.BorderLayout.PAGE_END);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        controlPanel.add(otherPanel, gridBagConstraints);
 
         mainPanel.add(controlPanel, new java.awt.GridBagConstraints());
 
@@ -774,6 +791,15 @@ public class MainFrame extends javax.swing.JFrame {
         });
         helpMenu.add(reportMenuItem);
 
+        donateMenuItem.setText(resourceMap.getString("donateMenuItem.text")); // NOI18N
+        donateMenuItem.setName("donateMenuItem"); // NOI18N
+        donateMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                donateMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(donateMenuItem);
+
         if(!MAC_OS_X) {
             helpMenu.setMnemonic(KeyEvent.VK_H);
         }
@@ -857,6 +883,20 @@ public class MainFrame extends javax.swing.JFrame {
     private void invertCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_invertCheckBoxItemStateChanged
         showPreview();
 }//GEN-LAST:event_invertCheckBoxItemStateChanged
+
+    private void donateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_donateMenuItemActionPerformed
+        try {
+            if (Desktop.isDesktopSupported()) {
+                URI uri = URI.create(donateUrl);
+                Desktop.getDesktop().browse(uri);
+            } else {
+                JOptionPane.showMessageDialog(null, "To update, visit the download URL:\n" + donateUrl,
+                        "Oops", JOptionPane.OK_OPTION);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_donateMenuItemActionPerformed
 
 
     /** Set up the GUI to reflect the settings in the WheelEncoder object
@@ -1329,8 +1369,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel absolutePanel;
     private javax.swing.JComboBox absoluteResolutionComboBox;
     private javax.swing.JRadioButton binaryCodeRadioButton;
+    private javax.swing.ButtonGroup codeButtonGroup;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JPanel diameterPanel;
+    private javax.swing.JMenuItem donateMenuItem;
     private wheelencodergenerator.EncoderPanel encoderPanel;
     private javax.swing.JTabbedPane encoderTabbedPane;
     private javax.swing.JMenuItem exitMenuItem;

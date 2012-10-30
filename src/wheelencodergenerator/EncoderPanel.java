@@ -158,7 +158,7 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         if (e != null && e.getOuterDiameter() > 0 && e.getInnerDiameter() < e.getOuterDiameter()) {
             double x = (size.width - d)/2; // align center
             double y = 0; // align top
-            doPaint(g2D, x, y, d, null); // no background color
+            doPaint(g2D, x, y, d, new Color(224,223,227)); // no background color
         }
     }
     /** This method is called from within the constructor to
