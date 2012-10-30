@@ -19,12 +19,10 @@ public class WheelEncoderGeneratorView extends FrameView {
     public WheelEncoderGeneratorView(SingleFrameApplication app) {
         super(app);
 
-        main = new MainFrame();
+        main = new MainFrame(this);
         this.setFrame(main);
     }
 
-
-    
 
     /*
     public final void setTaskBarIcon()

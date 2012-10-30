@@ -12,14 +12,19 @@
 package wheelencodergenerator;
 
 import com.apple.OSXAdapter;
+import java.awt.event.ComponentEvent;
 import org.jdesktop.application.Action;
 import com.botthoughts.JFileChooser;
 import com.botthoughts.JFileFilter;
 import com.botthoughts.UpdateChecker;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.print.PrinterException;
@@ -30,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.help.CSH;
@@ -46,6 +52,10 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.FrameView;
+import org.jdesktop.application.ResourceMap;
 
 
 /**
@@ -55,10 +65,10 @@ import javax.swing.SwingUtilities;
 public class MainFrame extends javax.swing.JFrame {
 
     // TODO: make these URLs properties
-    private String versionFileUrl = "http://wheel-encoder-generator.googlecode.com/svn/trunk/CurrentVersion.txt";
-    private String downloadUrl = "http://code.google.com/p/wheel-encoder-generator/downloads/list";
-    private String issueUrl = "http://code.google.com/p/wheel-encoder-generator/issues/list";
-    private String donateUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LYEDDNUM7X6H6";
+    private String versionUrl;
+    private String downloadUrl;
+    private String issueUrl;
+    private String donateUrl;
     private WheelEncoder encoder;
     private File encoderFile; // TODO: Med: encapsulate in encoder?
     private JFileFilter wegFileFilter = new JFileFilter();
@@ -76,9 +86,15 @@ public class MainFrame extends javax.swing.JFrame {
     private static boolean QUIET=false;
     private ImageExportChooser exporter = new ImageExportChooser();
     private SpinnerNumberModel resolutionSpinnerModel = new SpinnerNumberModel(16, 4, 36000, 2);
-    private String appTitle = org.jdesktop.application.Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext().getResourceMap(WheelEncoderGeneratorApp.class).getString("Application.title");
+    private String appTitle;
+    private String appVersion;
     private JDialog aboutBox;
-    
+    private FrameView parentView = null;
+
+    public MainFrame(FrameView parentView) {
+        this();
+        this.parentView = parentView;
+    }
 
     /** Creates new form TestFrame */
     public MainFrame() {
@@ -89,6 +105,24 @@ public class MainFrame extends javax.swing.JFrame {
             hb = hs.createHelpBroker();
             helpHandler = new CSH.DisplayHelpFromSource(hb);
         }
+
+        System.out.println("Initializing URLs...");
+        Properties prop = new Properties();
+        ApplicationContext c = Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext();
+        ResourceMap rm = c.getResourceMap(WheelEncoderGeneratorApp.class);
+        appVersion = rm.getString("Application.version");
+        appTitle = rm.getString("Application.title");
+
+        try {
+            prop.load(getClass().getResourceAsStream("/wheelencodergenerator/resources/app.properties"));
+            versionUrl = prop.getProperty("version.url");
+            downloadUrl = prop.getProperty("download.url");
+            donateUrl = prop.getProperty("donate.url");
+            issueUrl = prop.getProperty("issue.url");
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         System.out.println("Initializing components...");
         initComponents();
         registerForMacOSXEvents(); // OSX-specific setup
@@ -103,6 +137,7 @@ public class MainFrame extends javax.swing.JFrame {
         imageFileFilterList.add( new JFileFilter("GIF file", ".gif") );
         imageFileFilterList.add( new JFileFilter("JPEG file", ".jpg") );
         // Set taskbar / app jframe icon
+        // TODO convert this to resource/property
         Image image = new ImageIcon(getClass().getResource("/wheelencodergenerator/resources/windows/WheelEncoderGenerator.png")).getImage();
         this.setIconImage(image);
         // Initial "load" of new encoder
@@ -112,7 +147,7 @@ public class MainFrame extends javax.swing.JFrame {
         com.botthoughts.Debug.println(Thread.currentThread().getName());
         try {
             updateChecker = new UpdateChecker();
-            updateChecker.setURL(versionFileUrl);
+            updateChecker.setURL(versionUrl);
             updateChecker.setVersion(getVersion());
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -147,6 +182,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
     }
+
 
     private class DiameterInputVerifier extends InputVerifier {
         @Override
@@ -238,9 +274,13 @@ public class MainFrame extends javax.swing.JFrame {
         donateMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(600, 500));
         setName("Form"); // NOI18N
-        setResizable(false);
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         toolBar.setFloatable(false);
         toolBar.setRollover(true);
@@ -334,20 +374,11 @@ public class MainFrame extends javax.swing.JFrame {
         printButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(printButton);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 131;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 3, 0);
-        getContentPane().add(toolBar, gridBagConstraints);
-
         mainPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED, resourceMap.getColor("mainPanel.border.highlightOuterColor"), resourceMap.getColor("mainPanel.border.highlightInnerColor"), resourceMap.getColor("mainPanel.border.shadowOuterColor"), resourceMap.getColor("mainPanel.border.shadowInnerColor"))); // NOI18N
         mainPanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
-        mainPanel.setMinimumSize(new java.awt.Dimension(600, 370));
+        mainPanel.setMinimumSize(new java.awt.Dimension(580, 370));
         mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(600, 370));
-        mainPanel.setLayout(new java.awt.GridBagLayout());
+        mainPanel.setPreferredSize(new java.awt.Dimension(580, 370));
 
         encoderPanel.setBackground(resourceMap.getColor("encoderPanel.background")); // NOI18N
         encoderPanel.setToolTipText(resourceMap.getString("encoderPanel.toolTipText")); // NOI18N
@@ -365,23 +396,18 @@ public class MainFrame extends javax.swing.JFrame {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 391, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 355, Short.MAX_VALUE)
+            .addGap(0, 363, Short.MAX_VALUE)
         );
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        mainPanel.add(encoderPanel, gridBagConstraints);
-
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
-        controlPanel.setMaximumSize(new java.awt.Dimension(220, 355));
-        controlPanel.setMinimumSize(new java.awt.Dimension(220, 355));
+        controlPanel.setMaximumSize(new java.awt.Dimension(170, 350));
+        controlPanel.setMinimumSize(new java.awt.Dimension(170, 350));
         controlPanel.setName("controlPanel"); // NOI18N
+        controlPanel.setPreferredSize(new java.awt.Dimension(170, 350));
         controlPanel.setLayout(new java.awt.GridBagLayout());
 
         encoderTabbedPane.setToolTipText(resourceMap.getString("encoderTabbedPane.toolTipText")); // NOI18N
@@ -530,7 +556,7 @@ public class MainFrame extends javax.swing.JFrame {
         encoderTabbedPane.addTab(resourceMap.getString("absolutePanel.TabConstraints.tabTitle"), null, absolutePanel, resourceMap.getString("absolutePanel.TabConstraints.tabToolTip")); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         controlPanel.add(encoderTabbedPane, gridBagConstraints);
 
         diameterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("diameterPanel.border.title"))); // NOI18N
@@ -618,7 +644,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         controlPanel.add(diameterPanel, gridBagConstraints);
 
         otherPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("otherPanel.border.title"))); // NOI18N
@@ -643,17 +669,28 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         controlPanel.add(otherPanel, gridBagConstraints);
 
-        mainPanel.add(controlPanel, new java.awt.GridBagConstraints());
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        getContentPane().add(mainPanel, gridBagConstraints);
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
+                .addContainerGap())
+        );
 
         menuBar.setName("menuBar"); // NOI18N
         menuBar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -807,13 +844,34 @@ public class MainFrame extends javax.swing.JFrame {
 
         setJMenuBar(menuBar);
 
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(265, 265, 265))
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))
+        );
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         // This action handler is only called by non-Mac Exit menu item
-        if (promptSaveFirst())
-            System.exit(0);
+        if (promptSaveFirst()) {
+            this.setVisible(false);
+            if (parentView != null) {
+                parentView.getFrame().dispose();
+            }
+        }
 }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void updateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMenuItemActionPerformed
@@ -898,6 +956,22 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_donateMenuItemActionPerformed
 
+    // Ensure that the aspect ratio of the encoderPanel is within about 5% of square
+    // Otherwise, correct the width and height equally by half the error
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        Dimension mySize = this.getSize();
+        Dimension eSize = encoderPanel.getSize();
+        int delta = eSize.height - eSize.width;
+        if (delta/mySize.getWidth() < -0.05) { // too wide
+            mySize.width += delta/2; // delta is negative
+            mySize.height -= delta/2;  // delta is negative
+        } else if (delta/mySize.getWidth() > 0.05) { // too tall
+            mySize.height -= delta/2;  // delta is positive
+            mySize.width += delta/2;  // delta is positive
+        }
+        this.setSize(mySize);
+    }//GEN-LAST:event_formComponentResized
+
 
     /** Set up the GUI to reflect the settings in the WheelEncoder object
      * Used for loading or opening new encoder.
@@ -975,7 +1049,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     public final String getVersion() {
         // TODO fix the resourceMap stuff
-        return "0.2-beta";//getResourceMap().getString("Application.version");
+        return appVersion;
     }
 
 
@@ -985,6 +1059,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         try {
             if ( Integer.parseInt(innerDiameter.getText()) >= Integer.parseInt(outerDiameter.getText()) ) {
+                // TODO use warning icons
                 outerDiameter.setForeground(Color.red);
                 innerDiameter.setForeground(Color.red);
                 result = false;
