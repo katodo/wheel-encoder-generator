@@ -191,16 +191,12 @@ public class ImageExportChooserTest {
         window.textBox("filenameTextField").deleteText().enterText(filename).pressKey(KeyEvent.VK_ENTER);
         String result = ImageExportChooser.getExtension(filename);
         assertEquals(".png", result);
-TestUtil.delay(4000);
         window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("GIF.*")); // JPEG
         window.textBox("filenameTextField").requireText("test.gif");
-TestUtil.delay(4000);
         window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("JPEG.*")); // JPEG
         window.textBox("filenameTextField").requireText("test.jpg");
-TestUtil.delay(4000);
         window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("PNG.*")); // JPEG
         window.textBox("filenameTextField").requireText("test.png");
-TestUtil.delay(4000);
     }
 
 }
