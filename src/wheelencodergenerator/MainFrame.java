@@ -137,7 +137,7 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO convert this to resource/property
         Image image = new ImageIcon(getClass().getResource("/wheelencodergenerator/resources/windows/WheelEncoderGenerator.png")).getImage();
         this.setIconImage(image);
-        if (PlatformUtilities.isMac()) {
+        if (PlatformUtilities.isOSX()) {
             JOptionPane.setAppIcon(new ImageIcon(image));
         }
         // Initial "load" of new encoder
@@ -169,7 +169,7 @@ public class MainFrame extends javax.swing.JFrame {
     // Checks the platform, then attempts to register with the Apple EAWT
     // See OSXAdapter.java to see how this is done without directly referencing any Apple APIs
     private void registerForMacOSXEvents() {
-        if (PlatformUtilities.isMac()) {
+        if (PlatformUtilities.isOSX()) {
             try {
                 // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
                 // use as delegates for various com.apple.eawt.ApplicationListener methods
@@ -277,7 +277,6 @@ public class MainFrame extends javax.swing.JFrame {
         setBounds(new java.awt.Rectangle(0, 22, 600, 550));
         setMinimumSize(new java.awt.Dimension(600, 550));
         setName("Form"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(600, 550));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -398,11 +397,11 @@ public class MainFrame extends javax.swing.JFrame {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 356, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 464, Short.MAX_VALUE)
+            .addGap(0, 416, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -679,7 +678,7 @@ public class MainFrame extends javax.swing.JFrame {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                 .addGap(8, 8, 8)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -690,7 +689,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(77, 77, 77))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1372,6 +1371,9 @@ public class MainFrame extends javax.swing.JFrame {
     public void exportEncoder() {
         int option = ImageExportChooser.showDialog(this);
         if (option == ImageExportChooser.APPROVE_OPTION) {
+            // TODO: now show file save prompt
+
+
             try {
                 File f = exporter.getSelectedFile();
                 int response = JOptionPane.YES_OPTION;
