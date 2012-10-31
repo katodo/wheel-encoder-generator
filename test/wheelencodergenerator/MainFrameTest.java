@@ -38,16 +38,6 @@ public class MainFrameTest {
     public MainFrameTest() {
     }
 
-
-    private static void delay(int d) {
-        try {
-            Thread.sleep(d);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ImageExportChooserTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-
     @BeforeClass
     public static void setUpOnce() {
         FailOnThreadViolationRepaintManager.install();
