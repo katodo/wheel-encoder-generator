@@ -52,12 +52,11 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
      * using the supplied (x,y) start offset and d diameter with the specified
      * background color (-1 for no background)
      */
-    private void doPaint(Graphics2D g2D, double x, double y, double d, Color background)
+    private void doPaint(Graphics2D g2D, double x, double y, double width, double height, double diameter, Color background)
     {
-        Dimension size = getSize();
         double ratio = (double) e.getInnerDiameter() / (double) e.getOuterDiameter();
-        double id = d * ratio;
-        double trackWidth = (d - id)/2;
+        double id = diameter * ratio;
+        double trackWidth = (diameter - id)/2;
         double degree = 0;
         double offset = 0;
         int maxTrack = 0;
@@ -66,14 +65,14 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         // Background
         if (background != null) {
             g2D.setColor(background);
-            g2D.fillRect(0, 0, size.width, size.height);
+            g2D.fillRect(0, 0, (int) Math.round(width), (int) Math.round(height));
         }
 
         maxTrack = e.getTrackCount();
 
         for (int track = 0; track < maxTrack; track++) {
             offset = e.getOffset(track);
-            double dA = id + (maxTrack-track) * (d - id - 1) / maxTrack;
+            double dA = id + (maxTrack-track) * (diameter - id - 1) / maxTrack;
             double xA = x + track * trackWidth / maxTrack;
             double yA = y + track * trackWidth / maxTrack;
 
@@ -103,8 +102,8 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         g2D.setColor(Color.black);
         g2D.drawOval((int) Math.round(x+trackWidth), (int) Math.round(y+trackWidth), (int) Math.round(id), (int) Math.round(id));
         // Draw crosshairs
-        g2D.drawLine((int) Math.round(x+trackWidth), (int) Math.round(y+d/2), (int) Math.round(x+(d+id)/2), (int) Math.round(y+d/2));
-        g2D.drawLine((int) Math.round(x+d/2), (int) Math.round(y+trackWidth), (int) Math.round(x+d/2), (int) Math.round(y+(d+id)/2));
+        g2D.drawLine((int) Math.round(x+trackWidth), (int) Math.round(y+diameter/2), (int) Math.round(x+(diameter+id)/2), (int) Math.round(y+diameter/2));
+        g2D.drawLine((int) Math.round(x+diameter/2), (int) Math.round(y+trackWidth), (int) Math.round(x+diameter/2), (int) Math.round(y+(diameter+id)/2));
     }
 
     /* export()
@@ -123,15 +122,17 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         double d = (double) width; // diameter
 
         if (e != null && e.getOuterDiameter() > 0 && e.getInnerDiameter() < e.getOuterDiameter()) {
-            double x = 0; // align top
-            double y = 0; // align top
-            doPaint(g2D, x, y, d, Color.white);
+            doPaint(g2D, 0, 0, width, height, d, Color.white);
             // TODO catch export failures
-            boolean write = ImageIO.write(bufferedImage, formatName, file);
+            if (!ImageIO.write(bufferedImage, formatName, file)) {
+                // TODO do something with false return from write()
+            }
+
         }
     }
 
     // TODO: convert print() to directly call doPaint()
+    @Override
     public int print(Graphics g, PageFormat pf, int pi)
                        throws PrinterException {
         if (pi >= 1) {
@@ -144,6 +145,7 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         Dimension size = getSize();
         double d = (double) Math.min(size.width, size.height); // diameter
         // Outer diameter is in mm. Convert to inches then to dots based on 72dpi
+        // TODO change conversion to inches to support in/mm
         double scale = e.getOuterDiameter() * 72 * 0.0393700787 / d;
         g2.scale(scale, scale);
         paint(g2);
@@ -164,7 +166,7 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
             double y = 0; // align top
             // get default background color from uimanager
             UIDefaults defaults = UIManager.getLookAndFeel().getDefaults();
-            doPaint(g2D, x, y, d, defaults.getColor("control"));
+            doPaint(g2D, x, y, size.width, size.height, d, defaults.getColor("control"));
         }
     }
     /** This method is called from within the constructor to
