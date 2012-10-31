@@ -5,6 +5,7 @@
 
 package wheelencodergenerator;
 
+import com.botthoughts.PlatformUtilities;
 import java.util.regex.Pattern;
 import java.awt.event.KeyEvent;
 import org.fest.swing.edt.GuiQuery;
@@ -101,10 +102,19 @@ public class ImageExportChooserTest {
 
     @Test
     public void invalidAndValidDirectoryEntered() {
+        String bogus;
+        String aok;
+        if (PlatformUtilities.isMac()) {
+            bogus="/blah";
+            aok="/tmp";
+        } else {
+            bogus="C:\\blah";
+            aok="C:\\";
+        }
         window.textBox("filenameTextField").deleteText().enterText("test.png").pressKey(KeyEvent.VK_ENTER);
-        window.textBox("directoryTextField").deleteText().enterText("c:\\blah").pressKey(KeyEvent.VK_ENTER);;
+        window.textBox("directoryTextField").deleteText().enterText(bogus).pressKey(KeyEvent.VK_ENTER);;
         window.button("exportButton").requireDisabled();
-        window.textBox("directoryTextField").deleteText().enterText("c:\\").pressKey(KeyEvent.VK_ENTER);
+        window.textBox("directoryTextField").deleteText().enterText(aok).pressKey(KeyEvent.VK_ENTER);
         window.button("exportButton").requireEnabled();
     }
 
@@ -123,12 +133,17 @@ public class ImageExportChooserTest {
     @Test
     public void pressExportButton() {
         String filename="test.png";
-        String directory="C:\\";
+        String directory;
+        if (PlatformUtilities.isMac()) {
+            directory = "/tmp";
+        } else {
+            directory = "C:\\";
+        }
         window.textBox("filenameTextField").deleteText().enterText(filename).pressKey(KeyEvent.VK_ENTER);
         window.textBox("directoryTextField").deleteText().enterText(directory).pressKey(KeyEvent.VK_ENTER);
         window.button("exportButton").click();
         assertEquals(ImageExportChooser.getOption(),ImageExportChooser.APPROVE_OPTION);
-        assertEquals(dialog.getSelectedFile().getParent(), directory);
+        assertEquals(ImageExportChooser.getSelectedFile().getParent(), directory);
     }
 
     @Test
