@@ -22,6 +22,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
 
 /**
  *
@@ -158,7 +162,9 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         if (e != null && e.getOuterDiameter() > 0 && e.getInnerDiameter() < e.getOuterDiameter()) {
             double x = (size.width - d)/2; // align center
             double y = 0; // align top
-            doPaint(g2D, x, y, d, new Color(224,223,227)); // no background color
+            // get default background color from uimanager
+            UIDefaults defaults = UIManager.getLookAndFeel().getDefaults();
+            doPaint(g2D, x, y, d, defaults.getColor("control"));
         }
     }
     /** This method is called from within the constructor to

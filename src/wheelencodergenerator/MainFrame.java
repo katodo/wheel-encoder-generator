@@ -12,19 +12,15 @@
 package wheelencodergenerator;
 
 import com.apple.OSXAdapter;
-import java.awt.event.ComponentEvent;
 import org.jdesktop.application.Action;
 import com.botthoughts.JFileChooser;
 import com.botthoughts.JFileFilter;
 import com.botthoughts.UpdateChecker;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.print.PrinterException;
@@ -400,14 +396,13 @@ public class MainFrame extends javax.swing.JFrame {
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 418, Short.MAX_VALUE)
+            .addGap(0, 414, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
         controlPanel.setMaximumSize(new java.awt.Dimension(260, 350));
         controlPanel.setMinimumSize(new java.awt.Dimension(170, 350));
         controlPanel.setName("controlPanel"); // NOI18N
-        controlPanel.setPreferredSize(null);
         controlPanel.setLayout(new java.awt.GridBagLayout());
 
         encoderTabbedPane.setToolTipText(resourceMap.getString("encoderTabbedPane.toolTipText")); // NOI18N
@@ -684,11 +679,12 @@ public class MainFrame extends javax.swing.JFrame {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE))
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
+                    .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
