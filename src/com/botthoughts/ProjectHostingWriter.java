@@ -95,7 +95,7 @@ public class ProjectHostingWriter {
         entry.setStatus(new Status("New"));
         entry.addLabel(new Label("Type-"+type));
         entry.addLabel(new Label("Priority-Medium"));
-        String os = OperatingSystemValidator.getOS();
+        String os = PlatformUtilities.getOS();
         if (!os.equals(""))
             entry.addLabel(new Label("OpSys-"+os));
         entry.addCc(cc);

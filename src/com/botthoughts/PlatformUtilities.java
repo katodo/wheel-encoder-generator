@@ -8,7 +8,7 @@ package com.botthoughts;
  *
  * @author Michael Shimniok
  */
-public class OperatingSystemValidator {
+public class PlatformUtilities {
 
     public static String getOS() {
         String os = "";

@@ -15,6 +15,8 @@ import com.apple.OSXAdapter;
 import org.jdesktop.application.Action;
 import com.botthoughts.JFileChooser;
 import com.botthoughts.JFileFilter;
+import com.botthoughts.JOptionPane;
+import com.botthoughts.PlatformUtilities;
 import com.botthoughts.UpdateChecker;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -42,7 +44,6 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerModel;
@@ -136,6 +137,9 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO convert this to resource/property
         Image image = new ImageIcon(getClass().getResource("/wheelencodergenerator/resources/windows/WheelEncoderGenerator.png")).getImage();
         this.setIconImage(image);
+        if (PlatformUtilities.isMac()) {
+            JOptionPane.setAppIcon(new ImageIcon(image));
+        }
         // Initial "load" of new encoder
         newEncoder();
         System.out.println("Done with View initialization...");
@@ -1169,8 +1173,7 @@ public class MainFrame extends javax.swing.JFrame {
             if (encoder.isChanged()) {
                 int response = JOptionPane.showConfirmDialog(this,
                     "The encoder " + getFilename() + " has changed. Save the changes?", "Save?",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE );
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE );
                 if (response == JOptionPane.YES_OPTION) {
                     if (encoderFile.getName().equals(NEW_FILE)) {
                         File newFile = promptFileSave(encoderFile, wegFileFilter);
@@ -1200,20 +1203,18 @@ public class MainFrame extends javax.swing.JFrame {
      *
      */
     private void promptUpdate(boolean verbose) {
-        if (updateChecker.checkUpdate()) {
+        if (updateChecker.checkUpdate() || true) {
             Object[] options = {"Download", "Skip"};
-            JOptionPane pane = new JOptionPane();
-            pane.setOptions(options);
-            pane.setInitialSelectionValue(options[0]);
-            pane.setOptionType(JOptionPane.YES_NO_OPTION);
-            pane.setMessage("An updated version (" +
+            
+            int selectedValue = JOptionPane.showOptionDialog(this,
+                    "An updated version (" +
                     updateChecker.getCurrentVersion() +
-                    ") of this software\nis available. Download?");
-            pane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-            JDialog dialog = pane.createDialog(null, "Update Available");
-            dialog.setVisible(true);
-            Object selectedValue = pane.getValue();
-            if (selectedValue.equals(options[0])) {
+                    ") of this software\nis available. Download?",
+                    "Update Available", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE, null, 
+                    options, options[0]);
+
+            if (selectedValue == 0) {
                 // Launch your default web browser with ...
                 try {
                     if (Desktop.isDesktopSupported()) {
