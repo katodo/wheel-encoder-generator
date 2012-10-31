@@ -270,8 +270,10 @@ public class MainFrame extends javax.swing.JFrame {
         donateMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(600, 500));
+        setMinimumSize(new java.awt.Dimension(600, 520));
         setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(600, 520));
+        setSize(new java.awt.Dimension(600, 520));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -280,8 +282,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         toolBar.setFloatable(false);
         toolBar.setRollover(true);
-        toolBar.setMaximumSize(new java.awt.Dimension(9999, 65));
-        toolBar.setMinimumSize(new java.awt.Dimension(200, 65));
+        toolBar.setMaximumSize(new java.awt.Dimension(9999, 60));
+        toolBar.setMinimumSize(new java.awt.Dimension(200, 54));
         toolBar.setName("toolBar"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext().getActionMap(MainFrame.class, this);
@@ -396,7 +398,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 414, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -429,10 +431,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         resolutionSpinner.setModel((SpinnerModel) resolutionSpinnerModel);
         resolutionSpinner.setToolTipText(resourceMap.getString("resolutionSpinner.toolTipText")); // NOI18N
-        resolutionSpinner.setMaximumSize(new java.awt.Dimension(37, 20));
-        resolutionSpinner.setMinimumSize(new java.awt.Dimension(37, 20));
+        resolutionSpinner.setMaximumSize(new java.awt.Dimension(45, 20));
+        resolutionSpinner.setMinimumSize(new java.awt.Dimension(45, 20));
         resolutionSpinner.setName("resolutionSpinner"); // NOI18N
-        resolutionSpinner.setPreferredSize(new java.awt.Dimension(37, 20));
+        resolutionSpinner.setPreferredSize(new java.awt.Dimension(45, 20));
         resolutionSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 resolutionSpinnerStateChanged(evt);
@@ -532,10 +534,10 @@ public class MainFrame extends javax.swing.JFrame {
         absoluteResolutionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048", "4096" }));
         absoluteResolutionComboBox.setSelectedIndex(3);
         absoluteResolutionComboBox.setToolTipText(resourceMap.getString("absoluteResolutionComboBox.toolTipText")); // NOI18N
-        absoluteResolutionComboBox.setMaximumSize(new java.awt.Dimension(60, 20));
-        absoluteResolutionComboBox.setMinimumSize(new java.awt.Dimension(60, 20));
+        absoluteResolutionComboBox.setMaximumSize(new java.awt.Dimension(85, 20));
+        absoluteResolutionComboBox.setMinimumSize(new java.awt.Dimension(85, 20));
         absoluteResolutionComboBox.setName("absoluteResolutionComboBox"); // NOI18N
-        absoluteResolutionComboBox.setPreferredSize(new java.awt.Dimension(60, 20));
+        absoluteResolutionComboBox.setPreferredSize(new java.awt.Dimension(85, 20));
         absoluteResolutionComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 absoluteResolutionComboBoxItemStateChanged(evt);
@@ -683,7 +685,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE))
+                        .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
                     .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -853,8 +855,8 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE))
         );
 
         pack();

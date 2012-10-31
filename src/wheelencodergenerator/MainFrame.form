@@ -222,9 +222,15 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[600, 500]"/>
+      <Dimension value="[600, 520]"/>
     </Property>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[600, 520]"/>
+    </Property>
+    <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[600, 520]"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="menuBar"/>
@@ -259,8 +265,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Component id="toolBar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="mainPanel" pref="460" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="mainPanel" pref="444" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -271,10 +277,10 @@
         <Property name="floatable" type="boolean" value="false"/>
         <Property name="rollover" type="boolean" value="true"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[9999, 65]"/>
+          <Dimension value="[9999, 60]"/>
         </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[200, 65]"/>
+          <Dimension value="[200, 54]"/>
         </Property>
         <Property name="name" type="java.lang.String" value="toolBar" noResource="true"/>
       </Properties>
@@ -468,7 +474,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="encoderPanel" pref="414" max="32767" attributes="2"/>
+                          <Component id="encoderPanel" pref="398" max="32767" attributes="2"/>
                       </Group>
                       <Component id="controlPanel" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
@@ -505,7 +511,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="414" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -582,14 +588,14 @@
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" resourceKey="resolutionSpinner.toolTipText"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[37, 20]"/>
+                          <Dimension value="[45, 20]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[37, 20]"/>
+                          <Dimension value="[45, 20]"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="resolutionSpinner" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[37, 20]"/>
+                          <Dimension value="[45, 20]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -717,14 +723,14 @@
                         <Property name="selectedIndex" type="int" value="3"/>
                         <Property name="toolTipText" type="java.lang.String" resourceKey="absoluteResolutionComboBox.toolTipText"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[60, 20]"/>
+                          <Dimension value="[85, 20]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[60, 20]"/>
+                          <Dimension value="[85, 20]"/>
                         </Property>
                         <Property name="name" type="java.lang.String" value="absoluteResolutionComboBox" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[60, 20]"/>
+                          <Dimension value="[85, 20]"/>
                         </Property>
                       </Properties>
                       <Events>
