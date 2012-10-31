@@ -66,7 +66,7 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
         // Background
         if (background != null) {
             g2D.setColor(background);
-            g2D.fillRect(0, 0, (int) Math.round(d), (int) Math.round(d));
+            g2D.fillRect(0, 0, size.width, size.height);
         }
 
         maxTrack = e.getTrackCount();
@@ -176,7 +176,9 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setMinimumSize(new java.awt.Dimension(600, 550));
         setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(600, 550));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
