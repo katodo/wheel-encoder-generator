@@ -10,8 +10,6 @@ import java.awt.event.KeyEvent;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.fest.swing.fixture.DialogFixture;
 import org.junit.After;
 import org.junit.Before;
@@ -29,14 +27,6 @@ public class ImageExportChooserTest {
     private ImageExportChooser dialog;
     
     public ImageExportChooserTest() {
-    }
-
-    private static void delay() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ImageExportChooserTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @BeforeClass
@@ -155,16 +145,6 @@ public class ImageExportChooserTest {
         window.textBox("resolutionTextField").requireText("600");
     }
 
-    @Test
-    public void testFileChooserModality() {
-        // TODO fix modality test case
-        /*
-        window.button("browseButton").click();
-        window.requireDisabled();
-         * 
-         */
-    }
-
     /**
      * Test of getBasename method, of class ImageExportChooser.
      */
@@ -205,88 +185,22 @@ public class ImageExportChooserTest {
         assertEquals(expResult, result);
     }
 
-
-    /**
-     * Test of getSelectedType method, of class ImageExportChooser.
-     */
     @Test
-    public void testGetSelectedType() {
-        System.out.println("getSelectedType");
-        /*
-        ImageExportChooser instance = new ImageExportChooser();
-        String expResult = "";
-        String result = instance.getSelectedType();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-         *
-         */
-    }
-
-    /**
-     * Test of getSelectedResolution method, of class ImageExportChooser.
-     */
-    @Test
-    public void testGetSelectedResolution() {
-        System.out.println("getSelectedResolution");
-        /*
-        ImageExportChooser instance = new ImageExportChooser();
-        int expResult = 0;
-        int result = instance.getSelectedResolution();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-         *
-         */
-    }
-
-    /**
-     * Test of getSelectedFile method, of class ImageExportChooser.
-     */
-    @Test
-    public void testGetSelectedFile() {
-        System.out.println("getSelectedFile");
-        /*
-        ImageExportChooser instance = new ImageExportChooser();
-        File expResult = null;
-        File result = instance.getSelectedFile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-         *
-         */
-    }
-
-    /**
-     * Test of showDialog method, of class ImageExportChooser.
-     */
-    @Test
-    public void testShowDialog() {
-        System.out.println("showDialog");
-        /*
-        Component parent = null;
-        int expResult = 0;
-        int result = ImageExportChooser.showDialog(parent);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-         *
-         */
-    }
-
-    /**
-     * Test of main method, of class ImageExportChooser.
-     */
-    @Test
-    public void testMain() {
-        System.out.println("main");
-        /*
-        String[] args = null;
-        ImageExportChooser.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-         * 
-         */
+    public void testTypeComboBox() {
+        String filename = "test.png";
+        window.textBox("filenameTextField").deleteText().enterText(filename).pressKey(KeyEvent.VK_ENTER);
+        String result = ImageExportChooser.getExtension(filename);
+        assertEquals(".png", result);
+TestUtil.delay(4000);
+        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("GIF.*")); // JPEG
+        window.textBox("filenameTextField").requireText("test.gif");
+TestUtil.delay(4000);
+        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("JPEG.*")); // JPEG
+        window.textBox("filenameTextField").requireText("test.jpg");
+TestUtil.delay(4000);
+        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("PNG.*")); // JPEG
+        window.textBox("filenameTextField").requireText("test.png");
+TestUtil.delay(4000);
     }
 
 }

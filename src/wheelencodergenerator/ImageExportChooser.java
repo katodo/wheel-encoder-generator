@@ -342,6 +342,7 @@ public class ImageExportChooser extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fileTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileTypeComboBoxActionPerformed
+        updateExtension();
         validateFile();
     }//GEN-LAST:event_fileTypeComboBoxActionPerformed
 
@@ -489,6 +490,26 @@ public class ImageExportChooser extends JDialog {
         }
     }
 
+    public boolean validExtension(String fileName) {
+        boolean result = false;
+        String baseName = getBasename(fileName);
+        String extension = getExtension(fileName);
+
+        return result;
+    }
+
+
+    public void updateExtension() {
+        File file = new File(filenameTextField.getText());
+        String fileName = file.getName();
+        if (!fileName.equals("")) {
+            String baseName = getBasename(fileName);
+            int sel = fileTypeComboBox.getSelectedIndex();
+            String newExtension = types[sel].getExtension();
+            filenameTextField.setText(baseName + newExtension);
+        }
+    }
+
     // TODO: if the selected file is actually a directory it'd be nice if we just blanked out the filename and changed the directory accordingly
 
     /** Validate file user input and set appropriate warnings
@@ -497,23 +518,23 @@ public class ImageExportChooser extends JDialog {
     public void validateFile() {
         /* validate file */
         File file = new File(filenameTextField.getText());
-        String fn = file.getName();
-        String f = getBasename(fn);
-        String e = getExtension(fn);
+        String fileName = file.getName();
+        String baseName = getBasename(fileName);
+        String extension = getExtension(fileName);
         /* fix extension only if filename not blank */
-        if (fn.equals("")) {
+        if (fileName.equals("")) {
             fileWarning(null);
         } else {
             /* if extension blank, set to current selected type */
-            if (e.equals("")) {
+            if (extension.equals("")) {
                 int sel = fileTypeComboBox.getSelectedIndex();
-                e = types[sel].getExtension();
-                filenameTextField.setText(f + e);
+                extension = types[sel].getExtension();
+                filenameTextField.setText(baseName + extension);
             }
             /* validate extension */
             boolean invalid = true;
             for (int i=0; i < types.length; i++) {
-                if (types[i].getExtension().equals(e)) {
+                if (types[i].getExtension().equals(extension)) {
                     /* if extension is valid, update the selected file type to match */
                     fileTypeComboBox.setSelectedIndex(i);
                     invalid = false;
