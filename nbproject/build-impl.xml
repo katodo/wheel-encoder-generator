@@ -1011,6 +1011,8 @@ is divided into following sections:
                 <fileset dir="${dist.jar.dir}">
                         <include name="*.jar"/>
                 </fileset>
+        </copy>
+        <copy toDir="${application.resources.java}/lib">
                 <fileset dir="${dist.lib.dir}">
                         <include name="*.jar"/>
                 </fileset>
@@ -1026,7 +1028,7 @@ is divided into following sections:
                 <filterset>
                         <filter token="PROJECTNAMEASIDENTIFIER" value="${Application.id}"/>
                         <filter token="PROJECTMAINCLASS" value="${main.class}"/>
-                        <filter token="CLASSPATH" value="${jar.classpath}"/>
+                        <filter token="CLASSPATH" value="${run.classpath}"/>
                 </filterset>
         </copy>
         <!-- copy the icon -->

@@ -274,9 +274,9 @@ public class ImageExportChooser extends JDialog {
         resolutionTextField.setToolTipText(resourceMap.getString("resolutionTextField.toolTipText")); // NOI18N
         resolutionTextField.setInputVerifier(new NumberVerifier(0, 8192));
         resolutionTextField.setMaximumSize(new java.awt.Dimension(2147483647, 20));
-        resolutionTextField.setMinimumSize(new java.awt.Dimension(35, 20));
+        resolutionTextField.setMinimumSize(new java.awt.Dimension(65, 20));
         resolutionTextField.setName("resolutionTextField"); // NOI18N
-        resolutionTextField.setPreferredSize(new java.awt.Dimension(35, 20));
+        resolutionTextField.setPreferredSize(new java.awt.Dimension(65, 20));
         resolutionTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resolutionTextFieldActionPerformed(evt);
