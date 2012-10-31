@@ -104,7 +104,7 @@ public class ImageExportChooserTest {
     public void invalidAndValidDirectoryEntered() {
         String bogus;
         String aok;
-        if (PlatformUtilities.isMac()) {
+        if (PlatformUtilities.isOSX()) {
             bogus="/blah";
             aok="/tmp";
         } else {
@@ -134,7 +134,7 @@ public class ImageExportChooserTest {
     public void pressExportButton() {
         String filename="test.png";
         String directory;
-        if (PlatformUtilities.isMac()) {
+        if (PlatformUtilities.isOSX()) {
             directory = "/tmp";
         } else {
             directory = "C:\\";
@@ -168,15 +168,15 @@ public class ImageExportChooserTest {
         System.out.println("getBasename");
         String filename = "test.txt";
         String expResult = "test";
-        String result = ImageExportChooser.getBasename(filename);
+        String result = PlatformUtilities.getBasename(filename);
         assertEquals(expResult, result);
         filename = "test";
         expResult = "test";
-        result = ImageExportChooser.getBasename(filename);
+        result = PlatformUtilities.getBasename(filename);
         assertEquals(expResult, result);
         filename = "test.txt.jpg";
         expResult = "test.txt";
-        result = ImageExportChooser.getBasename(filename);
+        result = PlatformUtilities.getBasename(filename);
         assertEquals(expResult, result);
     }
 
@@ -188,15 +188,15 @@ public class ImageExportChooserTest {
         System.out.println("getExtension");
         String filename = "test.txt";
         String expResult = ".txt";
-        String result = ImageExportChooser.getExtension(filename);
+        String result = PlatformUtilities.getExtension(filename);
         assertEquals(expResult, result);
         filename = "test";
         expResult = "";
-        result = ImageExportChooser.getExtension(filename);
+        result = PlatformUtilities.getExtension(filename);
         assertEquals(expResult, result);
         filename = "test.txt.jpg";
         expResult = ".jpg";
-        result = ImageExportChooser.getExtension(filename);
+        result = PlatformUtilities.getExtension(filename);
         assertEquals(expResult, result);
     }
 
@@ -204,7 +204,7 @@ public class ImageExportChooserTest {
     public void testTypeComboBox() {
         String filename = "test.png";
         window.textBox("filenameTextField").deleteText().enterText(filename).pressKey(KeyEvent.VK_ENTER);
-        String result = ImageExportChooser.getExtension(filename);
+        String result = PlatformUtilities.getExtension(filename);
         assertEquals(".png", result);
         window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("GIF.*")); // JPEG
         window.textBox("filenameTextField").requireText("test.gif");

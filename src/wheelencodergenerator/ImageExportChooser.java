@@ -13,6 +13,7 @@ package wheelencodergenerator;
 
 import com.botthoughts.JFileChooser;
 import com.botthoughts.JFileFilter;
+import com.botthoughts.PlatformUtilities;
 import java.awt.Component;
 import java.io.File;
 import javax.swing.Icon;
@@ -52,7 +53,7 @@ public class ImageExportChooser extends JDialog {
         types[2] = new FileType("JPEG (*.jpg)", ".jpg", "jpg");
 
         initComponents();
-        directoryTextField.setText(new File("").getAbsolutePath());
+//        directoryTextField.setText(new File("").getAbsolutePath());
     }
 
     /** This method is called from within the constructor to
@@ -65,14 +66,6 @@ public class ImageExportChooser extends JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        filePanel = new javax.swing.JPanel();
-        fileWarnLabel = new javax.swing.JLabel();
-        directoryWarnLabel = new javax.swing.JLabel();
-        filenameTextField = new javax.swing.JTextField();
-        directoryTextField = new javax.swing.JTextField();
-        browseButton = new javax.swing.JToggleButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         exportPanel = new javax.swing.JPanel();
         resolutionWarnLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -86,141 +79,22 @@ public class ImageExportChooser extends JDialog {
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wheelencodergenerator.WheelEncoderGeneratorApp.class).getContext().getResourceMap(ImageExportChooser.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(440, 235));
+        setMinimumSize(new java.awt.Dimension(250, 130));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         setName("Form"); // NOI18N
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
-            }
-        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        filePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("filePanel.border.title"))); // NOI18N
-        filePanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
-        filePanel.setMinimumSize(new java.awt.Dimension(400, 90));
-        filePanel.setName("filePanel"); // NOI18N
-        filePanel.setPreferredSize(new java.awt.Dimension(400, 90));
-        filePanel.setLayout(new java.awt.GridBagLayout());
-
-        fileWarnLabel.setVisible(true);
-        fileWarnLabel.setIcon(resourceMap.getIcon("fileWarnLabel.icon")); // NOI18N
-        fileWarnLabel.setText(resourceMap.getString("fileWarnLabel.text")); // NOI18N
-        fileWarnLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        fileWarnLabel.setName("fileWarnLabel"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        filePanel.add(fileWarnLabel, gridBagConstraints);
-
-        directoryWarnLabel.setVisible(true);
-        directoryWarnLabel.setIcon(resourceMap.getIcon("directoryWarnLabel.icon")); // NOI18N
-        directoryWarnLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        directoryWarnLabel.setName("directoryWarnLabel"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        filePanel.add(directoryWarnLabel, gridBagConstraints);
-
-        filenameTextField.setText(resourceMap.getString("filenameTextField.text")); // NOI18N
-        filenameTextField.setMaximumSize(new java.awt.Dimension(9999, 20));
-        filenameTextField.setMinimumSize(new java.awt.Dimension(150, 20));
-        filenameTextField.setName("filenameTextField"); // NOI18N
-        filenameTextField.setPreferredSize(new java.awt.Dimension(9999, 20));
-        filenameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filenameTextFieldActionPerformed(evt);
-            }
-        });
-        filenameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                filenameTextFieldFocusLost(evt);
-            }
-        });
-        filenameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                filenameTextFieldKeyReleased(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        filePanel.add(filenameTextField, gridBagConstraints);
-
-        directoryTextField.setText(resourceMap.getString("directoryTextField.text")); // NOI18N
-        directoryTextField.setMaximumSize(new java.awt.Dimension(9999, 20));
-        directoryTextField.setMinimumSize(new java.awt.Dimension(200, 20));
-        directoryTextField.setName("directoryTextField"); // NOI18N
-        directoryTextField.setPreferredSize(new java.awt.Dimension(9999, 20));
-        directoryTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                directoryTextFieldActionPerformed(evt);
-            }
-        });
-        directoryTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                directoryTextFieldFocusLost(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        filePanel.add(directoryTextField, gridBagConstraints);
-
-        browseButton.setText(resourceMap.getString("browseButton.text")); // NOI18N
-        browseButton.setName("browseButton"); // NOI18N
-        browseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        filePanel.add(browseButton, gridBagConstraints);
-
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        filePanel.add(jLabel4, gridBagConstraints);
-
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        filePanel.add(jLabel5, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(filePanel, gridBagConstraints);
 
         exportPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("exportPanel.border.title"))); // NOI18N
         exportPanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
-        exportPanel.setMinimumSize(new java.awt.Dimension(200, 100));
+        exportPanel.setMinimumSize(new java.awt.Dimension(250, 100));
         exportPanel.setName("exportPanel"); // NOI18N
-        exportPanel.setPreferredSize(new java.awt.Dimension(200, 100));
+        exportPanel.setPreferredSize(new java.awt.Dimension(250, 100));
         exportPanel.setLayout(new java.awt.GridBagLayout());
 
         resolutionWarnLabel.setVisible(true);
@@ -245,11 +119,6 @@ public class ImageExportChooser extends JDialog {
         fileTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { types[0].getDescription(), types[1].getDescription(), types[2].getDescription() }));
         fileTypeComboBox.setSelectedIndex(0);
         fileTypeComboBox.setName("fileTypeComboBox"); // NOI18N
-        fileTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fileTypeComboBoxActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -282,11 +151,6 @@ public class ImageExportChooser extends JDialog {
                 resolutionTextFieldActionPerformed(evt);
             }
         });
-        resolutionTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                resolutionTextFieldKeyReleased(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -304,7 +168,7 @@ public class ImageExportChooser extends JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(exportPanel, gridBagConstraints);
 
@@ -314,7 +178,6 @@ public class ImageExportChooser extends JDialog {
 
         exportButton.setText(resourceMap.getString("exportButton.text")); // NOI18N
         exportButton.setActionCommand(resourceMap.getString("exportButton.actionCommand")); // NOI18N
-        exportButton.setEnabled(false);
         exportButton.setName("exportButton"); // NOI18N
         exportButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,245 +197,30 @@ public class ImageExportChooser extends JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fileTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileTypeComboBoxActionPerformed
-        updateExtension();
-        validateFile();
-    }//GEN-LAST:event_fileTypeComboBoxActionPerformed
-
-    private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
-        doBrowse();
-    }//GEN-LAST:event_browseButtonActionPerformed
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        // Initialize stuff here
-        if (selectedFile != null) {
-            filenameTextField.setText(selectedFile.getName());
-            directoryTextField.setText(selectedFile.getParent());
-        }
-        validateFile();
-        validateDirectory();
-    }//GEN-LAST:event_formComponentShown
-
-    private void filenameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_filenameTextFieldFocusLost
-        validateFile();
-    }//GEN-LAST:event_filenameTextFieldFocusLost
-
-    private void filenameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filenameTextFieldActionPerformed
-        validateFile();
-    }//GEN-LAST:event_filenameTextFieldActionPerformed
-
-    private void directoryTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directoryTextFieldActionPerformed
-        validateDirectory();
-    }//GEN-LAST:event_directoryTextFieldActionPerformed
-
-    private void directoryTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_directoryTextFieldFocusLost
-        validateDirectory();
-    }//GEN-LAST:event_directoryTextFieldFocusLost
-
     private void exportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportButtonActionPerformed
-        doExport();
+        doFileChoose();
     }//GEN-LAST:event_exportButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         doCancel();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        System.out.println("formWindowActivated()");
-    }//GEN-LAST:event_formWindowActivated
-
     private void resolutionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolutionTextFieldActionPerformed
         resolutionTextField.validate();
     }//GEN-LAST:event_resolutionTextFieldActionPerformed
-
-    private void filenameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filenameTextFieldKeyReleased
-        exportButton.setEnabled(validDirectory && validFile && !filenameTextField.getText().equals(""));
-    }//GEN-LAST:event_filenameTextFieldKeyReleased
-
-    private void resolutionTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_resolutionTextFieldKeyReleased
-        /* different behavior possible -- validate, warn while typing */
-    }//GEN-LAST:event_resolutionTextFieldKeyReleased
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // This only seems to run when the dialog is closed with the close box
         option = CANCEL_OPTION;
     }//GEN-LAST:event_formWindowClosing
 
-    /** return the basename of a file (extension removed)
-     *
-     * @param filename is the name of a file as a String
-     * @return the basename of the file with extension removed
-     */
-    public static String getBasename(String filename) {
-        String result="";
-
-        if (filename != null && !filename.equals("")) {
-            int lastDot = filename.lastIndexOf(".");
-            if (lastDot >= 0)
-                result = filename.substring(0, lastDot);
-            else
-                result = filename;
-        }
-
-        return result;
-    }
-
-    /** extract the extension of a file string
-     *
-     * @param filename is the name of a file
-     * @return the extension (e.g., ".txt") or "" if no extension present
-     */
-    public static String getExtension(String filename) {
-        String result="";
-
-        if (filename != null && !filename.equals("")) {
-            int lastDot = filename.lastIndexOf(".");
-            if (lastDot >= 0)
-                result = filename.substring(lastDot, filename.length());
-        }
-
-        return result;
-    }
-
-    /** Display warning icon and set invalid file state
-     *
-     * @param msg used to set tooltip text for the warning icon
-     */
-    public void fileWarning(String msg) {
-        if (msg == null || msg.equals("")) {
-            fileWarnLabel.setToolTipText("Ok");
-            fileWarnLabel.setIcon(blankIcon);
-            validFile = true;
-        } else {
-            fileWarnLabel.setToolTipText(msg);
-            fileWarnLabel.setIcon(warningIcon);
-            validFile = false;
-        }
-        exportButton.setEnabled(validDirectory && validFile && !filenameTextField.getText().equals(""));
-    }
-
-    /** Display warning icon and set invalid directory state
-     *
-     * @param msg used to set tooltip text for the warning icon
-     */
-    public void directoryWarning(String msg) {
-        if (msg == null || msg.equals("")) {
-            directoryWarnLabel.setToolTipText("Ok");
-            directoryWarnLabel.setIcon(blankIcon);
-            validDirectory = true;
-        } else {
-            directoryWarnLabel.setToolTipText(msg);
-            directoryWarnLabel.setIcon(warningIcon);
-            validDirectory = false;
-        }
-        exportButton.setEnabled(validDirectory && validFile && !filenameTextField.getText().equals(""));
-    }
-
-    /** Validate directory input and set appropriate warnings
-     * 
-     */
-    public void validateDirectory() {
-        /* validate directory */
-        File d = new File(this.directoryTextField.getText());
-        if (d == null || !d.exists() || !d.isDirectory()) {
-            directoryWarning("Invalid directory");
-        } else if (!d.canWrite()) {
-            directoryWarning("Can't open directory");
-        } else {
-            directoryWarning(null);
-        }
-    }
-
-    public boolean validExtension(String fileName) {
-        boolean result = false;
-        String baseName = getBasename(fileName);
-        String extension = getExtension(fileName);
-
-        return result;
-    }
-
-
-    public void updateExtension() {
-        File file = new File(filenameTextField.getText());
-        String fileName = file.getName();
-        if (!fileName.equals("")) {
-            String baseName = getBasename(fileName);
-            int sel = fileTypeComboBox.getSelectedIndex();
-            String newExtension = types[sel].getExtension();
-            filenameTextField.setText(baseName + newExtension);
-        }
-    }
-
-    // TODO: if the selected file is actually a directory it'd be nice if we just blanked out the filename and changed the directory accordingly
-
-    /** Validate file user input and set appropriate warnings
-     *
-     */
-    public void validateFile() {
-        /* validate file */
-        File file = new File(filenameTextField.getText());
-        String fileName = file.getName();
-        String baseName = getBasename(fileName);
-        String extension = getExtension(fileName);
-        /* fix extension only if filename not blank */
-        if (fileName.equals("")) {
-            fileWarning(null);
-        } else {
-            /* if extension blank, set to current selected type */
-            if (extension.equals("")) {
-                int sel = fileTypeComboBox.getSelectedIndex();
-                extension = types[sel].getExtension();
-                filenameTextField.setText(baseName + extension);
-            }
-            /* validate extension */
-            boolean invalid = true;
-            for (int i=0; i < types.length; i++) {
-                if (types[i].getExtension().equals(extension)) {
-                    /* if extension is valid, update the selected file type to match */
-                    fileTypeComboBox.setSelectedIndex(i);
-                    invalid = false;
-                }
-            }
-            if (invalid) {
-                fileWarning("Invalid file type selected");
-            } else {
-                /* check file */
-                if (file == null) {
-                    fileWarning("Null filename");
-                } else {
-                    fileWarning(null);
-                }
-            } // if (invalid) else
-        } // if fn not blank
-    } // validateInput()
-
-
-    /** Upon user selection of the export button, if the input is valid
-     * set the object's state: the option selected is set to APPROVE_OPTION or
-     * CANCEL_OPTION, the selected file, type, and resolution are stored to be
-     * accessed from the context that initiated the showDialog() call.
-     */
-    private void doExport() {
-        validateFile();
-        validateDirectory();
-        if (validFile && validDirectory) {
-            option = APPROVE_OPTION;
-            System.out.println("doExport(): filename: "+filenameTextField.getText());
-
-            File d = new File(directoryTextField.getText());
-            selectedFile = new File(directoryTextField.getText(), filenameTextField.getText());
-            selectedType = types[fileTypeComboBox.getSelectedIndex()].getType();
-            selectedResolution = Integer.parseInt(resolutionTextField.getText());
-            doExit();
-        }
-    }
 
     /** State is set to reflect selection of the cancel button with CANCEL_OPTION
      * to be returned to the context calling showDialog()
@@ -587,34 +235,43 @@ public class ImageExportChooser extends JDialog {
      */
     private void doExit() {
         setVisible(false);
-        System.out.println("doExit(): filename: "+filenameTextField.getText());
     }
 
     /** Launch a modal JFileChooser to select the directory and file of the
-     * image to be exported.
+     * image to be exported. If the chooser returns APPROVE_OPTION, then option
+     * is set to APPROVE_OPTION and the selected file, type, and resolution are
+     * stored to be accessed from the context that initiated the showDialog() call.
+     * If the chooser responds with CANCEL_OPTION, so does this dialog
      */
-    private void doBrowse() {
+    private void doFileChoose() {
         JFileChooser fc = new JFileChooser();
-        System.out.println("doBrowse(): filename: "+filenameTextField.getText());
-        fc.setSelectedFile(new File(directoryTextField.getText(), filenameTextField.getText()));
+        //fc.setSelectedFile(new File(directoryTextField.getText(), filenameTextField.getText()));
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fc.setFileFilter(types[fileTypeComboBox.getSelectedIndex()].getFf());
+        fc.setAcceptAllFileFilterUsed(false);
         // This simulates modality that isn't present
         // when java.swing.JFileChooser is opened from a modal dialog
         this.setEnabled(false);
+        selectedFile = null;
         if (fc.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
-            File selected = fc.getSelectedFile();
-            String path = selected.getParent();
-            String file = selected.getName();
-            String base = getBasename(file);
-            String ext = getExtension(file);
+            selectedFile = fc.getSelectedFile();
+            String path = selectedFile.getParent();
+            String file = selectedFile.getName();
+            String base = PlatformUtilities.getBasename(file);
+            String ext = PlatformUtilities.getExtension(file);
+            if (ext.equals("")) {
+                ext = types[fileTypeComboBox.getSelectedIndex()].getExtension();
+                selectedFile = new File(new File(selectedFile.getParent()), base + ext);
+            }
             System.out.println("doBrowse(): path: "+path);
             System.out.println("doBrowse(): file: "+file);
             System.out.println("doBrowse(): file base: "+base);
             System.out.println("doBrowse(): file ext: "+ext);
-            directoryTextField.setText(path);
-            filenameTextField.setText(file);
-            validateDirectory();
-            validateFile();
+            // TODO: check for bad file/directory ?
+            ImageExportChooser.option = APPROVE_OPTION;
+            selectedType = types[fileTypeComboBox.getSelectedIndex()].getType();
+            selectedResolution = Integer.parseInt(resolutionTextField.getText());
+            doExit();
         }
         // This simulates modality that isn't present
         // when java.swing.JFileChooser is opened from a modal dialog
@@ -625,23 +282,6 @@ public class ImageExportChooser extends JDialog {
         this.repaint();
     }
 
-    /** set the filename field (deprecated)
-     *
-     * @param filename the filename to be set
-     */
-    public void setFilename(String filename) {
-        filenameTextField.setText(filename);
-        validateDirectory();
-    }
-
-
-    /** set the directory field (deprecated)
-     *
-     * @param directory the directory to set
-     */
-    public void setDirectory(String directory) {
-        directoryTextField.setText(directory);
-    }
 
 
     /** return the selected resolution in pixels as int
@@ -705,21 +345,13 @@ public class ImageExportChooser extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton browseButton;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JTextField directoryTextField;
-    private javax.swing.JLabel directoryWarnLabel;
     private javax.swing.JButton exportButton;
     private javax.swing.JPanel exportPanel;
-    private javax.swing.JPanel filePanel;
     private javax.swing.JComboBox fileTypeComboBox;
-    private javax.swing.JLabel fileWarnLabel;
-    private javax.swing.JTextField filenameTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField resolutionTextField;
     private javax.swing.JLabel resolutionWarnLabel;
