@@ -883,7 +883,7 @@ public class MainFrame extends javax.swing.JFrame {
                 Desktop.getDesktop().browse(uri);
             } else {
                 JOptionPane.showMessageDialog(null, "To report a problem, visit the Issues URL:\n" + issueUrl,
-                        "Oops", JOptionPane.OK_OPTION);
+                        "Oops", JOptionPane.OK_OPTION );
             }
         } catch (IOException ex) {
             Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
