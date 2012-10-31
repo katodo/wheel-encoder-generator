@@ -923,12 +923,14 @@ is divided into following sections:
         <!-- uses 7-Zip -->
         <property file="nbproject/common.properties"/>
         <property name="jsmooth.exe" location="C:/Program Files/JSmooth 0.9.9-7/jsmoothcmd" />
-        <property name="resources_windows" location="${src.dir}/wheelencodergenerator/resources/windows"/>
-        <property name="jsmooth.file" location="${resources_windows}/${Application.id}.jsmooth"/>
+        <property name="resources.dir" location="${src.dir}/wheelencodergenerator/resources"/>
+        <property name="resources.windows" location="${resources.dir}/windows"/>
+        <property name="jsmooth.file" location="${resources.windows}/${Application.id}.jsmooth"/>
         <property name="jsmooth.dist" location="${dist.dir}/${Application.id}.jsmooth"/>
         <property name="zip.exe" location="C:/Program Files/7-Zip/7z" />
         <property name="zip.args" value="a -r -tzip" />
         <property name="launch4j.dir" location="C:/Program Files/Launch4j" />
+        <property name="launch4j.config" location="${resources.windows}/Launch4j.xml"/>
         <taskdef name="launch4j"
                 classname="net.sf.launch4j.ant.Launch4jTask"
                 classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
@@ -936,7 +938,7 @@ is divided into following sections:
 
         <echo message="Copying icon and splash screen to dist dir..."/>
         <copy toDir="${dist.dir}">
-            <fileset dir="${resources.windows.dir}">
+            <fileset dir="${resources.windows}">
                 <include name="WheelEncoderGenerator.ico"/>
                 <include name="splash.bmp"/>
             </fileset>
@@ -948,7 +950,7 @@ is divided into following sections:
         <delete file="${dist.dir}/${Application.id}.png" verbose="true" />
 
         <exec executable="C:/Program Files/Inno Setup 5/ISCC.exe">
-            <arg value="${resources.windows.dir}/installscript.iss"/>
+            <arg value="${resources.windows}/installscript.iss"/>
             <arg value="/dMySourcePath=${dist.dir}" />
             <arg value="/O${dist.dir}" />
             <arg value="/dMyAppVersion=${Application.version}" />
@@ -959,7 +961,7 @@ is divided into following sections:
     <target name="app-linux" depends="jar" description="Make a double-clickable Linux application">
         <property file="nbproject/common.properties"/>
         <property name="dist.lib.dir" location="${dist.dir}/lib" />
-        <property name="resources_linux" location="${src.dir}/wheelencodergenerator/resources/linux" />
+        <property name="resources.linux" location="${src.dir}/wheelencodergenerator/resources/linux" />
         <property name="application.linux" location="${dist.dir}/${Application.id}.linux"/>
         <property name="application.linux.lib" location="${application.linux}/lib"/>
 
@@ -978,12 +980,12 @@ is divided into following sections:
                 </fileset>
         </copy>
         <!-- copy launch script and fix permissions -->
-        <copy file="${resources_linux}/launch" toDir="${application.linux}"/>
+        <copy file="${resources.linux}/launch" toDir="${application.linux}"/>
         <exec executable="/bin/chmod">
                 <arg line="775 ${application.linux}/launch"/>
         </exec>
         <!-- create self-extracting script, compress it for download -->
-        <exec executable="${resources_linux}/makeself.sh" >
+        <exec executable="${resources.linux}/makeself.sh" >
                 <arg line="--nox11 ${application.linux} ${dist.dir}/WheelEncoderGenerator WheelEncoderGenerator ./launch" />
         </exec>
         <exec executable="/bin/gzip" >
@@ -994,7 +996,7 @@ is divided into following sections:
     <target name="app-osx" depends="jar" description="Make a double-clickable Mac OS X application">
         <property file="nbproject/common.properties"/>
         <property name="dist.lib.dir" location="${dist.dir}/lib" />
-        <property name="resources_macosx" location="${src.dir}/wheelencodergenerator/resources/macosx" />
+        <property name="resources.macosx" location="${src.dir}/wheelencodergenerator/resources/macosx" />
         <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
         <property name="application.macos" location="${dist.dir}/${Application.id}.app/Contents/MacOS"/>
         <property name="application.macos.stub" location="${application.macos}/${Application.id}"/>
@@ -1020,7 +1022,7 @@ is divided into following sections:
                 <arg line="755 '${application.macos.stub}'"/>
         </exec>
         <!-- copy and configure Info.plist -->
-        <copy file="${resources_macosx}/Info.plist" toFile="${dist.dir}/${Application.id}.app/Contents/Info.plist">
+        <copy file="${resources.macosx}/Info.plist" toFile="${dist.dir}/${Application.id}.app/Contents/Info.plist">
                 <filterset>
                         <filter token="PROJECTNAMEASIDENTIFIER" value="${Application.id}"/>
                         <filter token="PROJECTMAINCLASS" value="${main.class}"/>
@@ -1028,6 +1030,6 @@ is divided into following sections:
                 </filterset>
         </copy>
         <!-- copy the icon -->
-        <copy file="${resources_macosx}/${Application.id}.icns" toDir="${application.resources}"/>
+        <copy file="${resources.macosx}/${Application.id}.icns" toDir="${application.resources}"/>
     </target>
 </project>
