@@ -6,20 +6,16 @@
 package wheelencodergenerator;
 
 import com.botthoughts.Debug;
-import java.io.File;
+import com.botthoughts.PlatformUtilities;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import org.fest.swing.fixture.JButtonFixture;
-import org.fest.swing.fixture.JFileChooserFixture;
-import org.fest.swing.fixture.JOptionPaneFixture;
 import org.jdesktop.application.SingleFrameApplication;
 import javax.swing.JFrame;
+import org.fest.swing.driver.JMenuItemMatcher;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.finder.JFileChooserFinder;
 import org.fest.swing.finder.JOptionPaneFinder;
 import org.junit.AfterClass;
 import org.junit.After;
@@ -84,7 +80,11 @@ public class WheelEncoderGeneratorViewTest {
     @Test
     public void quitWithoutSavingCancel() {
         Debug.println("enter");
-        window.menuItem("exitMenuItem").click();
+        if (PlatformUtilities.isMac()) {
+            // TODO figure out how to deal with this
+        } else {
+            window.menuItem("exitMenuItem").click();
+        }
         JOptionPaneFinder.findOptionPane().using( window.robot ).buttonWithText("Cancel" ).requireEnabled().click();
     }
 

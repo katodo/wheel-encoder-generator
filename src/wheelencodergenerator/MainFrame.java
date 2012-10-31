@@ -169,7 +169,7 @@ public class MainFrame extends javax.swing.JFrame {
     // Checks the platform, then attempts to register with the Apple EAWT
     // See OSXAdapter.java to see how this is done without directly referencing any Apple APIs
     private void registerForMacOSXEvents() {
-        if (MAC_OS_X) {
+        if (PlatformUtilities.isMac()) {
             try {
                 // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
                 // use as delegates for various com.apple.eawt.ApplicationListener methods
@@ -1203,7 +1203,7 @@ public class MainFrame extends javax.swing.JFrame {
      *
      */
     private void promptUpdate(boolean verbose) {
-        if (updateChecker.checkUpdate() || true) {
+        if (updateChecker.checkUpdate()) {
             Object[] options = {"Download", "Skip"};
             
             int selectedValue = JOptionPane.showOptionDialog(this,
