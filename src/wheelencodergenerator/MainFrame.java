@@ -969,6 +969,7 @@ public class MainFrame extends javax.swing.JFrame {
             mySize.width += delta/2;  // delta is positive
         }
         this.setSize(mySize);
+        this.repaint();
     }//GEN-LAST:event_formComponentResized
 
 
