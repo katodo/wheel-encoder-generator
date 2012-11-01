@@ -5,6 +5,11 @@
 
 package wheelencodergenerator;
 
+import org.fest.swing.fixture.JTextComponentFixture;
+import org.junit.Assert;
+import java.io.File;
+import org.fest.swing.finder.JFileChooserFinder;
+import org.fest.swing.fixture.JFileChooserFixture;
 import com.botthoughts.PlatformUtilities;
 import java.util.regex.Pattern;
 import java.awt.event.KeyEvent;
@@ -26,19 +31,29 @@ public class ImageExportChooserTest {
 
     private DialogFixture window;
     private ImageExportChooser dialog;
-    
+    private static File existingFile;
+    private static File toBeCreatedFile;
+
     public ImageExportChooserTest() {
     }
 
     @BeforeClass
     public static void setUpOnce() {
         FailOnThreadViolationRepaintManager.install();
+        if (PlatformUtilities.isOSX() || PlatformUtilities.isLinux()) {
+            existingFile = new File("/tmp/test1.png");
+            toBeCreatedFile = new File("/tmp/test2.png");
+        } else {
+            existingFile = new File("C:\\tmp\\test1.png");
+            toBeCreatedFile = new File("C:\\tmp\\test2.png");
+        }
     }
 
     @Before
     public void setUp() {
+        TestUtil.createFile(existingFile);
+        TestUtil.deleteFile(toBeCreatedFile);
         dialog = GuiActionRunner.execute(new GuiQuery<ImageExportChooser>() {
-
             @Override
             protected ImageExportChooser executeInEDT() {
                 return new ImageExportChooser();
@@ -54,70 +69,6 @@ public class ImageExportChooserTest {
         window.cleanUp();
     }
 
-    // todo: make these text strings properties that can be shared by source and test harnesses
-    @Test
-    public void noFilenameEntered() {
-        window.textBox("filenameTextField").deleteText().enterText("test.png").pressKey(KeyEvent.VK_ENTER);
-        window.button("exportButton").requireEnabled();
-        window.textBox("filenameTextField").deleteText().pressKey(KeyEvent.VK_ENTER).requireText("");
-        window.button("exportButton").requireDisabled();
-    }
-
-    @Test
-    public void invalidAndValidFileameEntered() {
-        // Test entry of invalid extension
-        window.textBox("filenameTextField").deleteText().enterText("test.txt").pressKey(KeyEvent.VK_ENTER);
-        window.button("exportButton").requireDisabled();
-        window.textBox("filenameTextField").deleteText().enterText("test.png").pressKey(KeyEvent.VK_ENTER);
-        window.button("exportButton").requireEnabled();
-        window.comboBox("fileTypeComboBox").requireSelection(Pattern.compile("PNG.*")); // PNG
-    }
-
-    @Test
-    public void enterFileWithoutExtensionPng() {
-        window.textBox("filenameTextField").deleteText();
-        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("PNG.*")); // PNG
-        window.textBox("filenameTextField").deleteText().enterText("test").pressKey(KeyEvent.VK_ENTER).requireText("test.png");
-        window.button("exportButton").requireEnabled();
-        window.comboBox("fileTypeComboBox").requireSelection(Pattern.compile("PNG.*"));
-    }
-
-    @Test
-    public void enterFileWithoutExtensionGif() {
-        window.textBox("filenameTextField").deleteText();
-        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("GIF.*")); // GIF
-        window.textBox("filenameTextField").deleteText().enterText("test").pressKey(KeyEvent.VK_ENTER).requireText("test.gif");
-        window.button("exportButton").requireEnabled();
-        window.comboBox("fileTypeComboBox").requireSelection(Pattern.compile("GIF.*"));
-    }
-
-    @Test
-    public void enterFileWithoutExtensionJpg() {
-        window.textBox("filenameTextField").deleteText();
-        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("JPEG.*")); // JPEG
-        window.textBox("filenameTextField").deleteText().enterText("test").pressKey(KeyEvent.VK_ENTER).requireText("test.jpg");
-        window.button("exportButton").requireEnabled();
-        window.comboBox("fileTypeComboBox").requireSelection(2);
-    }
-
-    @Test
-    public void invalidAndValidDirectoryEntered() {
-        String bogus;
-        String aok;
-        if (PlatformUtilities.isOSX()) {
-            bogus="/blah";
-            aok="/tmp";
-        } else {
-            bogus="C:\\blah";
-            aok="C:\\";
-        }
-        window.textBox("filenameTextField").deleteText().enterText("test.png").pressKey(KeyEvent.VK_ENTER);
-        window.textBox("directoryTextField").deleteText().enterText(bogus).pressKey(KeyEvent.VK_ENTER);;
-        window.button("exportButton").requireDisabled();
-        window.textBox("directoryTextField").deleteText().enterText(aok).pressKey(KeyEvent.VK_ENTER);
-        window.button("exportButton").requireEnabled();
-    }
-
     @Test
     public void closeWindow() {
         window.close();
@@ -131,20 +82,25 @@ public class ImageExportChooserTest {
     }
 
     @Test
-    public void pressExportButton() {
-        String filename="test.png";
-        String directory;
-        if (PlatformUtilities.isOSX()) {
-            directory = "/tmp";
-        } else {
-            directory = "C:\\";
-        }
-        window.textBox("filenameTextField").deleteText().enterText(filename).pressKey(KeyEvent.VK_ENTER);
-        window.textBox("directoryTextField").deleteText().enterText(directory).pressKey(KeyEvent.VK_ENTER);
+    public void pressExportButtonCancel() {
         window.button("exportButton").click();
-        assertEquals(ImageExportChooser.getOption(),ImageExportChooser.APPROVE_OPTION);
-        assertEquals(ImageExportChooser.getSelectedFile().getParent(), directory);
+        JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
+        chooser.selectFile(toBeCreatedFile);
+        window.requireDisabled();
+        chooser.cancel();
+        window.requireEnabled();
     }
+
+    @Test
+    public void pressExportButtonSave() {
+        window.button("exportButton").click();
+        JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
+        chooser.selectFile(toBeCreatedFile);
+        window.requireDisabled();
+        chooser.approve();
+        window.requireEnabled();
+    }
+
 
     @Test
     public void enterInvalidResolution() {
@@ -158,60 +114,6 @@ public class ImageExportChooserTest {
         window.textBox("resolutionTextField").deleteText().enterText("d600").pressKey(KeyEvent.VK_ENTER);
         window.button("cancelButton").focus();
         window.textBox("resolutionTextField").requireText("600");
-    }
-
-    /**
-     * Test of getBasename method, of class ImageExportChooser.
-     */
-    @Test
-    public void testGetBasename() {
-        System.out.println("getBasename");
-        String filename = "test.txt";
-        String expResult = "test";
-        String result = PlatformUtilities.getBasename(filename);
-        assertEquals(expResult, result);
-        filename = "test";
-        expResult = "test";
-        result = PlatformUtilities.getBasename(filename);
-        assertEquals(expResult, result);
-        filename = "test.txt.jpg";
-        expResult = "test.txt";
-        result = PlatformUtilities.getBasename(filename);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getExtension method, of class ImageExportChooser.
-     */
-    @Test
-    public void testGetExtension() {
-        System.out.println("getExtension");
-        String filename = "test.txt";
-        String expResult = ".txt";
-        String result = PlatformUtilities.getExtension(filename);
-        assertEquals(expResult, result);
-        filename = "test";
-        expResult = "";
-        result = PlatformUtilities.getExtension(filename);
-        assertEquals(expResult, result);
-        filename = "test.txt.jpg";
-        expResult = ".jpg";
-        result = PlatformUtilities.getExtension(filename);
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void testTypeComboBox() {
-        String filename = "test.png";
-        window.textBox("filenameTextField").deleteText().enterText(filename).pressKey(KeyEvent.VK_ENTER);
-        String result = PlatformUtilities.getExtension(filename);
-        assertEquals(".png", result);
-        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("GIF.*")); // JPEG
-        window.textBox("filenameTextField").requireText("test.gif");
-        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("JPEG.*")); // JPEG
-        window.textBox("filenameTextField").requireText("test.jpg");
-        window.comboBox("fileTypeComboBox").selectItem(Pattern.compile("PNG.*")); // JPEG
-        window.textBox("filenameTextField").requireText("test.png");
     }
 
 }

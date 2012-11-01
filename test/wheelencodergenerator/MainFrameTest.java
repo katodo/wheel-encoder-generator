@@ -6,18 +6,20 @@
 package wheelencodergenerator;
 
 import com.botthoughts.Debug;
+import com.botthoughts.PlatformUtilities;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import junit.framework.Assert;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.finder.DialogFinder;
 import org.fest.swing.finder.JFileChooserFinder;
 import org.fest.swing.finder.JOptionPaneFinder;
+import org.fest.swing.fixture.DialogFixture;
+import org.fest.swing.fixture.JButtonFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.fixture.JOptionPaneFixture;
 import org.junit.AfterClass;
@@ -32,8 +34,10 @@ import org.junit.Test;
 public class MainFrameTest {
     private FrameFixture window;
     private JFrame app;
-    private File existingFile = new File("c:\\tmp\\test1.weg");
-    private File toBeCreatedFile = new File("c:\\tmp\\test2.weg");
+    private static File existingFile;
+    private static File toBeCreatedFile;
+    private static File existingImage;
+    private static File toBeCreatedImage;
 
     public MainFrameTest() {
     }
@@ -41,6 +45,17 @@ public class MainFrameTest {
     @BeforeClass
     public static void setUpOnce() {
         FailOnThreadViolationRepaintManager.install();
+        if (PlatformUtilities.isOSX() || PlatformUtilities.isLinux()) {
+            existingFile = new File("/tmp/test1.png");
+            toBeCreatedFile = new File("/tmp/test2.png");
+            existingImage = new File("/tmp/test1.png");
+            toBeCreatedImage = new File("/tmp/test2.png");
+        } else {
+            existingFile = new File("C:\\tmp\\test1.weg");
+            toBeCreatedFile = new File("C:\\tmp\\test2.weg");
+            existingImage = new File("C:\\tmp\\test1.png");
+            toBeCreatedImage = new File("C:\\tmp\\test2.png");
+        }
     }
 
     @AfterClass
@@ -49,8 +64,10 @@ public class MainFrameTest {
 
     @Before
     public void setUp() {
-        createFile(existingFile);
-        deleteFile(toBeCreatedFile);
+        TestUtil.createFile(existingFile);
+        TestUtil.deleteFile(toBeCreatedFile);
+        TestUtil.createFile(existingImage);
+        TestUtil.deleteFile(toBeCreatedImage);
         app = GuiActionRunner.execute(new GuiQuery<JFrame>() {
             @Override
             protected JFrame executeInEDT() {
@@ -70,25 +87,6 @@ public class MainFrameTest {
         window.cleanUp();
     }
 
-    public void createFile(File f) {
-        if (!f.exists()) {
-            System.out.println("saveAndQuit() creating "+f.getName());
-            try {
-                if (!f.createNewFile()) {
-                    Assert.fail();
-                }
-            } catch (IOException ex) {
-                Assert.fail();
-            }
-        }
-    }
-
-    public void deleteFile(File f) {
-        if (f.exists()) {
-            System.out.println("saveAndQuit() Deleting "+f.getName());
-            f.delete();
-        }
-    }
 
     @Test
     public void quitPromptSaveCancel() {
@@ -98,12 +96,14 @@ public class MainFrameTest {
         window.requireVisible();
     }
 
+
     @Test
     public void quitPromptSaveNo() {
         window.menuItem("exitMenuItem").click();
         JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?").buttonWithText("No" ).click();
         window.requireNotVisible();
     }
+
 
     @Test
     public void quitPromptSaveYes() {
@@ -116,6 +116,7 @@ public class MainFrameTest {
         }
         window.requireNotVisible();
     }
+
 
     @Test
     public void saveAndReplace() {
@@ -130,6 +131,7 @@ public class MainFrameTest {
             Assert.fail();
         }
     }
+
 
     @Test
     public void saveChangeQuitPromptSaveNo() {
@@ -147,6 +149,7 @@ public class MainFrameTest {
             window.requireNotVisible();
         }
     }
+
 
     @Test
     public void openQuitNoPrompt() {
@@ -167,12 +170,14 @@ public class MainFrameTest {
         }
     }
 
+
     @Test
     public void openPromptSaveNo() {
         window.menuItem("openMenuItem").click();
         JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().buttonWithText("No").click();
         JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
     }
+
 
     @Test
     public void saveChangeOpenPromptSave() {
@@ -189,5 +194,47 @@ public class MainFrameTest {
             window.menuItem("openMenuItem").click();
             JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?");
         }
+    }
+
+
+    @Test
+    public void exportSave() {
+        window.button("exportButton").click();
+        DialogFixture dialog = window.dialog();
+        dialog.requireVisible().button("exportButton").click();
+        //window.requireDisabled();
+        JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
+        chooser.selectFile(toBeCreatedImage).approve();
+        if (!toBeCreatedImage.exists()) {
+            Assert.fail();
+        }
+    }
+
+
+    @Test
+    public void exportCancel() {
+        window.button("exportButton").click();
+        DialogFixture dialog = window.dialog();
+        dialog.requireVisible().button("exportButton").click();
+        //window.requireDisabled();
+        JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
+        chooser.selectFile(toBeCreatedImage).cancel();
+        dialog.button("cancelButton").click();
+        if (toBeCreatedImage.exists()) {
+            Assert.fail();
+        }
+    }
+
+    
+    @Test
+    public void exportSaveReplace() {
+        window.button("exportButton").click();
+        DialogFixture dialog = window.dialog();
+        dialog.requireVisible().button("exportButton").click();
+        //window.requireDisabled();
+        JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
+        chooser.selectFile(existingImage).approve();
+        JOptionPaneFixture option = JOptionPaneFinder.findOptionPane().using(window.robot).requireVisible();
+        option.buttonWithText("No").click();
     }
 }
