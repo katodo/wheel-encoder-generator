@@ -61,7 +61,6 @@ import org.jdesktop.application.ResourceMap;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    // TODO: make these URLs properties
     private String versionUrl;
     private String downloadUrl;
     private String issueUrl;
@@ -75,7 +74,7 @@ public class MainFrame extends javax.swing.JFrame {
     private HelpSet hs;
     private HelpBroker hb;
     private CSH.DisplayHelpFromSource helpHandler;
-    public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x")); // TODO: use OperatingSystemValidator
+    public static boolean MAC_OS_X = PlatformUtilities.isOSX();
     public static int MENU_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     public static String NEW_FILE = "";
     private UpdateChecker updateChecker;
@@ -1370,7 +1369,6 @@ public class MainFrame extends javax.swing.JFrame {
     public void exportEncoder() {
         int option = ImageExportChooser.showDialog(this);
         if (option == ImageExportChooser.APPROVE_OPTION) {
-            // TODO: now show file save prompt
             try {
                 File f = ImageExportChooser.getSelectedFile();
                 int response = JOptionPane.YES_OPTION;
