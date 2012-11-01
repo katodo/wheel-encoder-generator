@@ -49,6 +49,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.FrameView;
@@ -122,6 +123,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         System.out.println("Initializing components...");
         initComponents();
+        // Unfortunately if we do this before, then simply adding/creating the tabbed
+        // pane fires off the event. Maybe there's a less sloppy way to do this...
+        encoderTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                showPreview();
+            }
+        });
         registerForMacOSXEvents(); // OSX-specific setup
         // Setup file filters for weg and image files
         wegFileFilter.setDescription("Wheel Encoder Generator files (*.weg)");
@@ -375,7 +384,7 @@ public class MainFrame extends javax.swing.JFrame {
         printButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(printButton);
 
-        mainPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED, resourceMap.getColor("mainPanel.border.highlightOuterColor"), resourceMap.getColor("mainPanel.border.highlightInnerColor"), resourceMap.getColor("mainPanel.border.shadowOuterColor"), resourceMap.getColor("mainPanel.border.shadowInnerColor"))); // NOI18N
+        mainPanel.setBorder(new javax.swing.border.SoftBevelBorder(1, resourceMap.getColor("mainPanel.border.highlightOuterColor"), resourceMap.getColor("mainPanel.border.highlightInnerColor"), resourceMap.getColor("mainPanel.border.shadowOuterColor"), resourceMap.getColor("mainPanel.border.shadowInnerColor"))); // NOI18N
         mainPanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
         mainPanel.setMinimumSize(new java.awt.Dimension(580, 370));
         mainPanel.setName("mainPanel"); // NOI18N
@@ -412,11 +421,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         encoderTabbedPane.setToolTipText(resourceMap.getString("encoderTabbedPane.toolTipText")); // NOI18N
         encoderTabbedPane.setName("encoderTabbedPane"); // NOI18N
-        encoderTabbedPane.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                encoderTabbedPaneMouseClicked(evt);
-            }
-        });
 
         standardPanel.setMaximumSize(new java.awt.Dimension(131, 96));
         standardPanel.setName("standardPanel"); // NOI18N
@@ -927,10 +931,6 @@ public class MainFrame extends javax.swing.JFrame {
         showPreview();
 }//GEN-LAST:event_absoluteResolutionComboBoxItemStateChanged
 
-    private void encoderTabbedPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encoderTabbedPaneMouseClicked
-        showPreview();
-}//GEN-LAST:event_encoderTabbedPaneMouseClicked
-
     private void innerDiameterFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_innerDiameterFocusLost
         showPreview();
 }//GEN-LAST:event_innerDiameterFocusLost
@@ -1372,19 +1372,19 @@ public class MainFrame extends javax.swing.JFrame {
         int option = ImageExportChooser.showDialog(this);
         if (option == ImageExportChooser.APPROVE_OPTION) {
             // TODO: now show file save prompt
-
-
             try {
-                File f = exporter.getSelectedFile();
+                File f = ImageExportChooser.getSelectedFile();
                 int response = JOptionPane.YES_OPTION;
-                if (f.exists()) {
+                if (f != null && f.exists()) {
                     response = JOptionPane.showConfirmDialog(this,
                         "File "+f.getName()+" exists. Replace?", "File exists",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE );
                 }
                 if (response == JOptionPane.YES_OPTION) {
-                    encoderPanel.export(ImageExportChooser.getSelectedFile(), ImageExportChooser.getSelectedFileType(), ImageExportChooser.getSelectedResolution());
+                    encoderPanel.export(ImageExportChooser.getSelectedFile(), 
+                                        ImageExportChooser.getSelectedFileType(),
+                                        ImageExportChooser.getSelectedResolution());
                 }
             } catch (IOException ex) {
                 Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
