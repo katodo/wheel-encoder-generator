@@ -255,7 +255,9 @@ public class ImageExportChooser extends JDialog {
         JFileChooser fc = new JFileChooser();
         //fc.setSelectedFile(new File(directoryTextField.getText(), filenameTextField.getText()));
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        fc.setFileFilter(types[fileTypeComboBox.getSelectedIndex()].getFf());
+        int selected = fileTypeComboBox.getSelectedIndex();
+        fc.setSelectedFile(new File("Untitled"+types[selected].getExtension()));
+        fc.setFileFilter(types[selected].getFf());
         fc.setAcceptAllFileFilterUsed(false);
         // This simulates modality that isn't present
         // when java.swing.JFileChooser is opened from a modal dialog

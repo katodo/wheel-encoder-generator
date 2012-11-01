@@ -998,33 +998,42 @@ is divided into following sections:
         <property name="dist.lib.dir" location="${dist.dir}/lib" />
         <property name="resources.macosx" location="${src.dir}/wheelencodergenerator/resources/macosx" />
         <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
-        <property name="application.macos" location="${dist.dir}/${Application.id}.app/Contents/MacOS"/>
-        <property name="application.macos.stub" location="${application.macos}/${Application.id}"/>
-        <property name="application.resources" location="${dist.dir}/${Application.id}.app/Contents/Resources"/>
-        <property name="application.resources.java" location="${dist.dir}/${Application.id}.app/Contents/Resources/Java"/>
+        <property name="dmg.dir" location="${dist.dir}/dmg"/>
+        <property name="dmg.tmp.file" location="${dist.dir}/${Application.id}-tmp.dmg"/>
+        <property name="dmg.file" location="${dist.dir}/${Application.id}.dmg"/>
+        <property name="app.dir" location="${dmg.dir}/${Application.id}.app"/>
+        <property name="app.contents" location="${app.dir}/Contents"/>
+        <property name="app.macos" location="${app.contents}/MacOS"/>
+        <property name="app.stub" location="${app.macos}/${Application.id}"/>
+        <property name="app.resources" location="${app.contents}/Resources"/>
+        <property name="app.java" location="${app.resources}/Java"/>
+        <property name="mountdir" value="/tmp"/>
 
         <mkdir dir="${dist.dir}"/>
-        <mkdir dir="${application.resources.java}"/>
-        <mkdir dir="${application.macos}"/>
+        <mkdir dir="${dmg.dir}"/>
+        <mkdir dir="${app.macos}"/>
+        <mkdir dir="${app.java}"/>
         <!-- copy jars -->
-        <copy toDir="${application.resources.java}">
+        <copy toDir="${app.java}">
                 <fileset dir="${dist.jar.dir}">
                         <include name="*.jar"/>
                 </fileset>
         </copy>
-        <copy toDir="${application.resources.java}/lib">
+        <copy toDir="${app.java}/lib">
                 <fileset dir="${dist.lib.dir}">
                         <include name="*.jar"/>
                 </fileset>
         </copy>
         <!-- copy application stub -->
-        <copy file="${apple.appstub}" toFile="${application.macos}/${Application.id}"/>
+        <copy file="${apple.appstub}" toFile="${app.stub}"/>
         <!-- fix stub permissions -->
         <exec executable="/bin/chmod">
-                <arg line="755 '${application.macos.stub}'"/>
+                <arg line="755 '${app.stub}'"/>
         </exec>
+        <!-- copy splash screen image -->
+        <copy file="${src.dir}/wheelencodergenerator/resources/splash.png" toDir="${app.java}"/>
         <!-- copy and configure Info.plist -->
-        <copy file="${resources.macosx}/Info.plist" toFile="${dist.dir}/${Application.id}.app/Contents/Info.plist">
+        <copy file="${resources.macosx}/Info.plist" toFile="${app.contents}/Info.plist">
                 <filterset>
                         <filter token="PROJECTNAMEASIDENTIFIER" value="${Application.id}"/>
                         <filter token="PROJECTMAINCLASS" value="${main.class}"/>
@@ -1032,6 +1041,61 @@ is divided into following sections:
                 </filterset>
         </copy>
         <!-- copy the icon -->
-        <copy file="${resources.macosx}/${Application.id}.icns" toDir="${application.resources}"/>
+        <copy file="${resources.macosx}/${Application.id}.icns" toDir="${app.resources}"/>
+        <!-- Create a temporary Disk Image -->
+        <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="create"/>
+          <arg value="-srcfolder"/>
+          <arg value="${dmg.dir}"/>
+          <arg value="-volname"/>
+          <arg value="${Application.id}"/>
+          <arg value="-ov"/>
+          <arg value="${dmg.tmp.file}"/>
+          <arg value="-format"/>
+          <arg value="UDRW"/>
+        </exec>
+        <!-- Attach the temporary image -->
+        <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="attach"/>
+          <arg value="${dmg.tmp.file}"/>
+          <arg value="-mountroot"/>
+          <arg value="${mountdir}/"/>
+        </exec>
+        <!-- Copy the background, the volume icon and DS_Store files -->
+        <mkdir dir="${mountdir}/${Application.id}/.background"/>
+        <copy file="${resources.macosx}/background.png"
+              tofile="${mountdir}/${Application.id}/.background/background.png"
+              overwrite="true"/>
+<!--        <copy file="VolumeIcon.icns"
+              tofile="${mountdir}/${Application.id}/.VolumeIcon.icns"
+              overwrite="true"/>-->
+        <copy file="${resources.macosx}/DS_Store"
+              tofile="${mountdir}/${Application.id}/.DS_Store"
+              overwrite="true"/>
+        <!-- Indicate that we want a custom icon -->
+        <!--<exec executable="/Developer/Tools/SetFile" os="Mac OS X">
+          <arg value="-a"/>
+          <arg value="C"/>
+          <arg value="${mountdir}/${Application.id}"/>
+        </exec>-->
+        <!-- Add a symbolic link to the Applications directory -->
+        <symlink link="${mountdir}/${Application.id}" resource="/Applications"/>
+        <!-- Detach the temporary image -->
+        <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="detach"/>
+          <arg value="${mountdir}/${Application.id}"/>
+        </exec>
+        <!-- Compress it to a new image -->
+        <exec executable="/usr/bin/hdiutil" os="Mac OS X" failonerror="true">
+          <arg value="convert"/>
+          <arg value="${dmg.tmp.file}"/>
+          <arg value="-format"/>
+          <arg value="UDZO"/>
+          <arg value="-o"/>
+          <arg value="${dmg.file}"/>
+        </exec>
+
+        <!-- Delete the temporary image -->
+        <delete file="${dmg.tmp.file}" quiet="yes" failonerror="false"/>
     </target>
 </project>

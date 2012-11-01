@@ -46,6 +46,8 @@
 		<string>1.6+</string>
 		<key>MainClass</key>
 		<string>@PROJECTMAINCLASS@</string>
+                <key>SplashFile</key>
+                <string>$JAVAROOT/splash.png</string>
 		<key>Properties</key>
 		<dict>
 			<key>apple.laf.useScreenMenuBar</key>

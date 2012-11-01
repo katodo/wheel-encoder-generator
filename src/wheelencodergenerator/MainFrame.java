@@ -49,7 +49,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.FrameView;
@@ -889,7 +888,7 @@ public class MainFrame extends javax.swing.JFrame {
                 URI uri = URI.create(issueUrl);
                 Desktop.getDesktop().browse(uri);
             } else {
-                JOptionPane.showMessageDialog(null, "To report a problem, visit the Issues URL:\n" + issueUrl,
+                JOptionPane.showMessageDialog(this, "To report a problem, visit the Issues URL:\n" + issueUrl,
                         "Oops", JOptionPane.OK_OPTION );
             }
         } catch (IOException ex) {
@@ -949,7 +948,7 @@ public class MainFrame extends javax.swing.JFrame {
                 URI uri = URI.create(donateUrl);
                 Desktop.getDesktop().browse(uri);
             } else {
-                JOptionPane.showMessageDialog(null, "To update, visit the download URL:\n" + donateUrl,
+                JOptionPane.showMessageDialog(this, "To update, visit the download URL:\n" + donateUrl,
                         "Oops", JOptionPane.OK_OPTION);
             }
         } catch (IOException ex) {
@@ -1220,7 +1219,7 @@ public class MainFrame extends javax.swing.JFrame {
                         URI uri = URI.create(downloadUrl);
                         Desktop.getDesktop().browse(uri);
                     } else {
-                        JOptionPane.showMessageDialog(null, "To update, visit the download URL:\n" + downloadUrl,
+                        JOptionPane.showMessageDialog(this, "To update, visit the download URL:\n" + downloadUrl,
                                 "Oops", JOptionPane.OK_OPTION);
                     }
                 } catch (IOException ex) {
@@ -1228,7 +1227,7 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         } else if (verbose) {
-            JOptionPane.showMessageDialog(null, "Wheel Encoder Generator is up to date!", "Updated", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Wheel Encoder Generator is up to date!", "Updated", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -1375,7 +1374,10 @@ public class MainFrame extends javax.swing.JFrame {
             try {
                 File f = ImageExportChooser.getSelectedFile();
                 int response = JOptionPane.YES_OPTION;
-                if (f != null && f.exists()) {
+                /* if we're on OSX, using the FIleDialog then we were already prompted */
+                /* TODO: move this prompt into the JFileChooser code */
+                /* if f is null, just move along and see what crashes */
+                if (f != null && f.exists() && !PlatformUtilities.isOSX()) {
                     response = JOptionPane.showConfirmDialog(this,
                         "File "+f.getName()+" exists. Replace?", "File exists",
                     JOptionPane.YES_NO_OPTION,
