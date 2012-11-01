@@ -5,13 +5,10 @@
 
 package wheelencodergenerator;
 
-import org.fest.swing.fixture.JTextComponentFixture;
-import org.junit.Assert;
 import java.io.File;
 import org.fest.swing.finder.JFileChooserFinder;
 import org.fest.swing.fixture.JFileChooserFixture;
 import com.botthoughts.PlatformUtilities;
-import java.util.regex.Pattern;
 import java.awt.event.KeyEvent;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiActionRunner;
@@ -101,10 +98,9 @@ public class ImageExportChooserTest {
         window.requireEnabled();
     }
 
-
     @Test
     public void enterInvalidResolution() {
-        // TODO test focus change and enter separately
+        // TODO test use of focus change and enter separately
         window.textBox("resolutionTextField").deleteText().enterText("-600").pressKey(KeyEvent.VK_ENTER);
         window.button("cancelButton").focus();
         window.textBox("resolutionTextField").requireText("0");
