@@ -73,7 +73,7 @@ public class ImageExportChooser extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         resolutionTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        buttonPanel = new javax.swing.JPanel();
         exportButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
@@ -88,7 +88,6 @@ public class ImageExportChooser extends JDialog {
                 formWindowClosing(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         exportPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("exportPanel.border.title"))); // NOI18N
         exportPanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
@@ -166,15 +165,11 @@ public class ImageExportChooser extends JDialog {
         gridBagConstraints.gridy = 1;
         exportPanel.add(jLabel3, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(exportPanel, gridBagConstraints);
-
-        jPanel1.setMaximumSize(new java.awt.Dimension(9999, 9999));
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setPreferredSize(new java.awt.Dimension(75, 33));
+        buttonPanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
+        buttonPanel.setMinimumSize(new java.awt.Dimension(300, 35));
+        buttonPanel.setName("buttonPanel"); // NOI18N
+        buttonPanel.setPreferredSize(new java.awt.Dimension(300, 35));
+        buttonPanel.setLayout(new java.awt.GridBagLayout());
 
         exportButton.setText(resourceMap.getString("exportButton.text")); // NOI18N
         exportButton.setActionCommand(resourceMap.getString("exportButton.actionCommand")); // NOI18N
@@ -184,7 +179,9 @@ public class ImageExportChooser extends JDialog {
                 exportButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(exportButton);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 4);
+        buttonPanel.add(exportButton, gridBagConstraints);
 
         cancelButton.setText(resourceMap.getString("cancelButton.text")); // NOI18N
         cancelButton.setName("cancelButton"); // NOI18N
@@ -193,13 +190,24 @@ public class ImageExportChooser extends JDialog {
                 cancelButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(cancelButton);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 0, 0);
+        buttonPanel.add(cancelButton, gridBagConstraints);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(exportPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+            .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(exportPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -276,7 +284,8 @@ public class ImageExportChooser extends JDialog {
         // This simulates modality that isn't present
         // when java.swing.JFileChooser is opened from a modal dialog
         this.setEnabled(true);
-        myParent.toFront();
+        if (myParent != null)
+            myParent.toFront();
         this.toFront();
         this.requestFocus();
         this.repaint();
@@ -345,6 +354,7 @@ public class ImageExportChooser extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton exportButton;
     private javax.swing.JPanel exportPanel;
@@ -352,7 +362,6 @@ public class ImageExportChooser extends JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField resolutionTextField;
     private javax.swing.JLabel resolutionWarnLabel;
     // End of variables declaration//GEN-END:variables
