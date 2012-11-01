@@ -76,8 +76,6 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
             double xA = x + track * trackWidth / maxTrack;
             double yA = y + track * trackWidth / maxTrack;
 
-            // TODO: Invert 1's and 0's (ie black, white)
-            // Easy enough to invert this based on UI input.
             if (e.isInverted())
                 color = Color.white;
             else
@@ -114,7 +112,7 @@ public class EncoderPanel extends javax.swing.JPanel implements Printable {
      */
     public void export(File file, String formatName, int width) throws IOException
     {
-        int height = width; // TODO: need some way to specify w/h of image
+        int height = width;
         // Create a buffered image in which to draw
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         // Create a graphics contents on the buffered image
