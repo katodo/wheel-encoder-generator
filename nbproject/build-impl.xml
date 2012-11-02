@@ -1000,7 +1000,7 @@ is divided into following sections:
         <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
         <property name="dmg.dir" location="${dist.dir}/dmg"/>
         <property name="dmg.tmp.file" location="${dist.dir}/${Application.id}-tmp.dmg"/>
-        <property name="dmg.file" location="${dist.dir}/${Application.id}.dmg"/>
+        <property name="dmg.file" location="${dist.dir}/${Application.id}-${Application.version}.dmg"/>
         <property name="app.dir" location="${dmg.dir}/${Application.id}.app"/>
         <property name="app.contents" location="${app.dir}/Contents"/>
         <property name="app.macos" location="${app.contents}/MacOS"/>

@@ -404,11 +404,11 @@ public class MainFrame extends javax.swing.JFrame {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 356, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 464, Short.MAX_VALUE)
+            .addGap(0, 416, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -680,7 +680,7 @@ public class MainFrame extends javax.swing.JFrame {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                 .addGap(8, 8, 8)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -691,7 +691,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(77, 77, 77))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -751,6 +751,7 @@ public class MainFrame extends javax.swing.JFrame {
             fileMenu.add(jSeparator2);
 
             exitMenuItem.setAction(actionMap.get("doExit")); // NOI18N
+            exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
             fileMenu.add(exitMenuItem);
         }
 
@@ -1215,6 +1216,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         JFileChooser fc = new JFileChooser();
         fc.setFileFilter(ff);
+        fc.setAcceptAllFileFilterUsed(false);
 
         if (defaultFile == null || defaultFile.getName().equals(NEW_FILE)) {
             fc.setSelectedFile(new File("Untitled.weg"));
@@ -1223,8 +1225,9 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            //file = fc.getSelectedFile().getAbsoluteFile();
             file = fc.getSelectedFile().getAbsoluteFile();
-            System.out.println("promptFileSave(): Selected File: "+file.getName());
+            System.out.println("promptFileSave(): Selected File: "+file.getAbsolutePath());
         }
 
         return file;
@@ -1344,21 +1347,9 @@ public class MainFrame extends javax.swing.JFrame {
         if (option == ImageExportChooser.APPROVE_OPTION) {
             try {
                 File f = ImageExportChooser.getSelectedFile();
-                int response = JOptionPane.YES_OPTION;
-                /* if we're on OSX, using the FIleDialog then we were already prompted */
-                /* TODO: move this prompt into the JFileChooser code */
-                /* if f is null, just move along and see what crashes */
-                if (f != null && f.exists() && !PlatformUtilities.isOSX()) {
-                    response = JOptionPane.showConfirmDialog(this,
-                        "File "+f.getName()+" exists. Replace?", "File exists",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE );
-                }
-                if (response == JOptionPane.YES_OPTION) {
-                    encoderPanel.export(ImageExportChooser.getSelectedFile(), 
-                                        ImageExportChooser.getSelectedFileType(),
-                                        ImageExportChooser.getSelectedResolution());
-                }
+                encoderPanel.export(ImageExportChooser.getSelectedFile(),
+                                    ImageExportChooser.getSelectedFileType(),
+                                    ImageExportChooser.getSelectedResolution());
             } catch (IOException ex) {
                 Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
             }

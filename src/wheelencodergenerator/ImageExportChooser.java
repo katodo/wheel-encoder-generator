@@ -273,10 +273,7 @@ public class ImageExportChooser extends JDialog {
                 ext = types[fileTypeComboBox.getSelectedIndex()].getExtension();
                 selectedFile = new File(new File(selectedFile.getParent()), base + ext);
             }
-            System.out.println("doBrowse(): path: "+path);
-            System.out.println("doBrowse(): file: "+file);
-            System.out.println("doBrowse(): file base: "+base);
-            System.out.println("doBrowse(): file ext: "+ext);
+            System.out.println("doFileChoose(): selected: "+selectedFile.getAbsolutePath());
             // TODO: check for bad file/directory ?
             ImageExportChooser.option = APPROVE_OPTION;
             selectedType = types[fileTypeComboBox.getSelectedIndex()].getType();

@@ -30,12 +30,10 @@ public class TestUtil {
     }
 
     public static void createFile(File f) {
-        if (!f.exists()) {
-            System.out.println("saveAndQuit() creating "+f.getName());
+        if (f != null && !f.exists()) {
+            System.out.println("createFile() creating "+f.getName());
             try {
-                if (!f.createNewFile()) {
-                    Assert.fail();
-                }
+                Assert.assertTrue(f.createNewFile());
             } catch (IOException ex) {
                 Assert.fail();
             }
@@ -43,9 +41,9 @@ public class TestUtil {
     }
 
     public static void deleteFile(File f) {
-        if (f.exists()) {
-            System.out.println("saveAndQuit() Deleting "+f.getName());
-            f.delete();
+        if (f != null && f.exists()) {
+            System.out.print("deleteFile() Deleting "+f.getName());
+            System.out.println(" "+Boolean.toString(f.delete()));
         }
     }
 

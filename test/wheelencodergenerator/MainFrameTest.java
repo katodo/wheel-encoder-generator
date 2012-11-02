@@ -76,8 +76,8 @@ public class MainFrameTest {
     @Before
     public void setUp() {
         TestUtil.createFile(existingFile);
-        TestUtil.deleteFile(toBeCreatedFile);
         TestUtil.createFile(existingImage);
+        TestUtil.deleteFile(toBeCreatedFile);
         TestUtil.deleteFile(toBeCreatedImage);
         app = GuiActionRunner.execute(new GuiQuery<JFrame>() {
             @Override
@@ -95,45 +95,52 @@ public class MainFrameTest {
 
     @After
     public void tearDown() {
-        window.cleanUp();
+        if (window != null)
+            window.cleanUp();
     }
 
-    /*
+
     @Test
     public void quitPromptSaveCancel() {
         Debug.println("enter");
-        KeyPressInfo ki = KeyPressInfo.keyCode(KeyEvent.VK_Q);
-        window.pressAndReleaseKey(ki.modifiers(Platform.controlOrCommandMask()));
+        if (Platform.isOSX()) {
+            KeyPressInfo ki = KeyPressInfo.keyCode(KeyEvent.VK_Q);
+            window.pressAndReleaseKey(ki.modifiers(Platform.controlOrCommandMask()));
+        } else {
+            window.menuItemWithPath("File|Exit").click();
+        }
         JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?").buttonWithText("Cancel" ).click();
         window.requireVisible();
     }
 
-    
+
     @Test
     public void quitPromptSaveNo() {
-        KeyPressInfo ki = KeyPressInfo.keyCode(KeyEvent.VK_Q);
-        window.pressAndReleaseKey(ki.modifiers(Platform.controlOrCommandMask()));
+        if (Platform.isOSX()) {
+            KeyPressInfo ki = KeyPressInfo.keyCode(KeyEvent.VK_Q);
+            window.pressAndReleaseKey(ki.modifiers(Platform.controlOrCommandMask()));
+        } else {
+            window.menuItemWithPath("File|Exit").click();
+        }
         JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?").buttonWithText("No" ).click();
         window.requireNotVisible();
     }
-     * 
-     */
 
 
-    /*
     @Test
     public void quitPromptSaveYes() {
-        KeyPressInfo ki = KeyPressInfo.keyCode(KeyEvent.VK_Q);
-        window.pressAndReleaseKey(ki.modifiers(Platform.controlOrCommandMask()));
+        if (Platform.isOSX()) {
+            KeyPressInfo ki = KeyPressInfo.keyCode(KeyEvent.VK_Q);
+            window.pressAndReleaseKey(ki.modifiers(Platform.controlOrCommandMask()));
+        } else {
+            window.menuItemWithPath("File|Exit").click();
+        }
         JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?").buttonWithText("Yes").click();
         JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot );
         chooser.selectFile(toBeCreatedFile).approve();
-        if (!toBeCreatedFile.exists()) {
-            Assert.fail();
-        }
+        Assert.assertTrue(toBeCreatedFile.exists());
     }
-     *
-     */
+
 
     @Test
     public void saveAndReplace() {
@@ -149,48 +156,40 @@ public class MainFrameTest {
             JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Replace?").buttonWithText("Yes").click();
             window.button("saveButton").requireDisabled();
         }
-        if (!existingFile.exists()) {
-            Assert.fail();
-        }
+        Assert.assertTrue(existingFile.exists());
     }
 
-    /*
 
     @Test
     public void saveChangeQuitPromptSaveNo() {
         window.menuItem("saveMenuItem").click();
         JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
         chooser.selectFile(toBeCreatedFile).approve();
-        if (!toBeCreatedFile.exists()) {
-            Assert.fail();
-        } else {
-            window.button("saveButton").requireDisabled();
-            window.spinner("resolutionSpinner").enterTextAndCommit("128");
-            window.button("saveButton").requireEnabled();
-            window.menuItem("exitMenuItem").click();
-            JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?").buttonWithText("No" ).click();
-            window.requireNotVisible();
-        }
+        Assert.assertTrue(toBeCreatedFile.exists());
+        window.button("saveButton").requireDisabled();
+        window.spinner("resolutionSpinner").enterTextAndCommit("128");
+        window.button("saveButton").requireEnabled();
+        window.menuItemWithPath("File|Exit").click();
+        JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?").buttonWithText("No" ).click();
+        window.requireNotVisible();
+        TestUtil.deleteFile(toBeCreatedFile);
     }
 
-
+    
     @Test
     public void openQuitNoPrompt() {
         window.button("saveButton").requireEnabled();
         window.menuItem("saveMenuItem").click();
         JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
         chooser.selectFile(toBeCreatedFile).approve();
-        if (!toBeCreatedFile.exists()) {
-            Assert.fail();
-        } else {
-            window.button("saveButton").requireDisabled();
-            window.menuItem("openMenuItem").click();
-            chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
-            chooser.selectFile(toBeCreatedFile).approve();
-            window.button("saveButton").requireDisabled();
-            window.menuItem("exitMenuItem").click();
-            window.requireNotVisible();
-        }
+        Assert.assertTrue(toBeCreatedFile.exists());
+        window.button("saveButton").requireDisabled();
+        window.menuItem("openMenuItem").click();
+        chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
+        chooser.selectFile(toBeCreatedFile).approve();
+        window.button("saveButton").requireDisabled();
+        window.menuItemWithPath("File|Exit").click();
+        window.requireNotVisible();
     }
 
     
@@ -208,15 +207,12 @@ public class MainFrameTest {
         window.menuItem("saveMenuItem").click();
         JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
         chooser.selectFile(toBeCreatedFile).approve();
-        if (!toBeCreatedFile.exists()) {
-            Assert.fail();
-        } else {
-            window.button("saveButton").requireDisabled();
-            window.checkBox("quadratureCheckBox").check();
-            window.button("saveButton").requireEnabled();
-            window.menuItem("openMenuItem").click();
-            JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?");
-        }
+        Assert.assertTrue(toBeCreatedFile.exists());
+        window.button("saveButton").requireDisabled();
+        window.checkBox("quadratureCheckBox").check();
+        window.button("saveButton").requireEnabled();
+        window.menuItem("openMenuItem").click();
+        JOptionPaneFinder.findOptionPane().using( window.robot ).requireVisible().requireTitle("Save?");
     }
 
 
@@ -228,14 +224,10 @@ public class MainFrameTest {
         //window.requireDisabled();
         JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
         chooser.selectFile(toBeCreatedImage).approve();
-        if (!toBeCreatedImage.exists()) {
-            Assert.fail();
-        }
+        Assert.assertTrue(toBeCreatedImage.exists());
     }
-     *
-     */
 
-/*
+
     @Test
     public void exportCancel() {
         window.button("exportButton").click();
@@ -245,9 +237,7 @@ public class MainFrameTest {
         JFileChooserFixture chooser = JFileChooserFinder.findFileChooser().using( window.robot ).requireVisible();
         chooser.selectFile(toBeCreatedImage).cancel();
         dialog.button("cancelButton").click();
-        if (toBeCreatedImage.exists()) {
-            Assert.fail();
-        }
+        Assert.assertFalse(toBeCreatedImage.exists());
     }
 
     
@@ -262,6 +252,6 @@ public class MainFrameTest {
         JOptionPaneFixture option = JOptionPaneFinder.findOptionPane().using(window.robot).requireVisible();
         option.buttonWithText("No").click();
     }
-    *
-    */
+
+
 }
