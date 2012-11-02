@@ -382,7 +382,7 @@ public class MainFrame extends javax.swing.JFrame {
         printButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(printButton);
 
-        mainPanel.setBorder(new javax.swing.border.SoftBevelBorder(1, resourceMap.getColor("mainPanel.border.highlightOuterColor"), resourceMap.getColor("mainPanel.border.highlightInnerColor"), resourceMap.getColor("mainPanel.border.shadowOuterColor"), resourceMap.getColor("mainPanel.border.shadowInnerColor"))); // NOI18N
+        mainPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED, resourceMap.getColor("mainPanel.border.highlightOuterColor"), resourceMap.getColor("mainPanel.border.highlightInnerColor"), resourceMap.getColor("mainPanel.border.shadowOuterColor"), resourceMap.getColor("mainPanel.border.shadowInnerColor"))); // NOI18N
         mainPanel.setMaximumSize(new java.awt.Dimension(9999, 9999));
         mainPanel.setMinimumSize(new java.awt.Dimension(580, 370));
         mainPanel.setName("mainPanel"); // NOI18N
@@ -404,11 +404,11 @@ public class MainFrame extends javax.swing.JFrame {
         encoderPanel.setLayout(encoderPanelLayout);
         encoderPanelLayout.setHorizontalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
+            .addGap(0, 350, Short.MAX_VALUE)
         );
         encoderPanelLayout.setVerticalGroup(
             encoderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 464, Short.MAX_VALUE)
         );
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("controlPanel.border.title"))); // NOI18N
@@ -680,7 +680,7 @@ public class MainFrame extends javax.swing.JFrame {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(8, 8, 8)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -691,7 +691,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(77, 77, 77))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                .addComponent(encoderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -750,13 +750,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (!MAC_OS_X) {
             fileMenu.add(jSeparator2);
 
-            exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
-            exitMenuItem.setName("exitMenuItem"); // NOI18N
-            exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    exitMenuItemActionPerformed(evt);
-                }
-            });
+            exitMenuItem.setAction(actionMap.get("doExit")); // NOI18N
             fileMenu.add(exitMenuItem);
         }
 
@@ -810,34 +804,22 @@ public class MainFrame extends javax.swing.JFrame {
             helpMenu.add(aboutMenuItem);
         }
 
+        updateMenuItem.setAction(actionMap.get("promptUpdate")); // NOI18N
         updateMenuItem.setText(resourceMap.getString("updateMenuItem.text")); // NOI18N
         updateMenuItem.setName("updateMenuItem"); // NOI18N
-        updateMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateMenuItemActionPerformed(evt);
-            }
-        });
         helpMenu.add(updateMenuItem);
 
         jSeparator5.setName("jSeparator5"); // NOI18N
         helpMenu.add(jSeparator5);
 
+        reportMenuItem.setAction(actionMap.get("reportIssue")); // NOI18N
         reportMenuItem.setText(resourceMap.getString("reportMenuItem.text")); // NOI18N
         reportMenuItem.setName("reportMenuItem"); // NOI18N
-        reportMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reportMenuItemActionPerformed(evt);
-            }
-        });
         helpMenu.add(reportMenuItem);
 
+        donateMenuItem.setAction(actionMap.get("donate")); // NOI18N
         donateMenuItem.setText(resourceMap.getString("donateMenuItem.text")); // NOI18N
         donateMenuItem.setName("donateMenuItem"); // NOI18N
-        donateMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                donateMenuItemActionPerformed(evt);
-            }
-        });
         helpMenu.add(donateMenuItem);
 
         if(!MAC_OS_X) {
@@ -867,93 +849,47 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        // This action handler is only called by non-Mac Exit menu item
-        if (promptSaveFirst()) {
-            this.setVisible(false);
-            if (parentView != null) {
-                parentView.getFrame().dispose();
-            }
-        }
-}//GEN-LAST:event_exitMenuItemActionPerformed
-
-    private void updateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMenuItemActionPerformed
-        promptUpdate(VERBOSE);
-}//GEN-LAST:event_updateMenuItemActionPerformed
-
-    private void reportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportMenuItemActionPerformed
-        try {
-            if (Desktop.isDesktopSupported()) {
-                URI uri = URI.create(issueUrl);
-                Desktop.getDesktop().browse(uri);
-            } else {
-                JOptionPane.showMessageDialog(this, "To report a problem, visit the Issues URL:\n" + issueUrl,
-                        "Oops", JOptionPane.OK_OPTION );
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-}//GEN-LAST:event_reportMenuItemActionPerformed
-
     private void menuBarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuBarMouseClicked
         showPreview();
-}//GEN-LAST:event_menuBarMouseClicked
+    }//GEN-LAST:event_menuBarMouseClicked
 
     private void encoderPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encoderPanelMouseClicked
         showPreview();
-}//GEN-LAST:event_encoderPanelMouseClicked
-
-    private void resolutionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_resolutionSpinnerStateChanged
-        showPreview();
-}//GEN-LAST:event_resolutionSpinnerStateChanged
+    }//GEN-LAST:event_encoderPanelMouseClicked
 
     private void quadratureCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_quadratureCheckBoxItemStateChanged
         encoder.setQuadratureTrack(evt.getStateChange() == ItemEvent.SELECTED);
         showPreview();
-}//GEN-LAST:event_quadratureCheckBoxItemStateChanged
+    }//GEN-LAST:event_quadratureCheckBoxItemStateChanged
 
     private void indexCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_indexCheckBoxItemStateChanged
         encoder.setIndexTrack(evt.getStateChange() == ItemEvent.SELECTED);
         showPreview();
-}//GEN-LAST:event_indexCheckBoxItemStateChanged
+    }//GEN-LAST:event_indexCheckBoxItemStateChanged
 
     private void grayCodeRadioButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grayCodeRadioButtonMouseReleased
         showPreview();
-}//GEN-LAST:event_grayCodeRadioButtonMouseReleased
+    }//GEN-LAST:event_grayCodeRadioButtonMouseReleased
 
     private void binaryCodeRadioButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_binaryCodeRadioButtonMouseReleased
         showPreview();
-}//GEN-LAST:event_binaryCodeRadioButtonMouseReleased
+    }//GEN-LAST:event_binaryCodeRadioButtonMouseReleased
 
     private void absoluteResolutionComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_absoluteResolutionComboBoxItemStateChanged
         showPreview();
-}//GEN-LAST:event_absoluteResolutionComboBoxItemStateChanged
+    }//GEN-LAST:event_absoluteResolutionComboBoxItemStateChanged
 
     private void innerDiameterFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_innerDiameterFocusLost
         showPreview();
-}//GEN-LAST:event_innerDiameterFocusLost
+    }//GEN-LAST:event_innerDiameterFocusLost
 
     private void outerDiameterFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_outerDiameterFocusLost
         showPreview();
-}//GEN-LAST:event_outerDiameterFocusLost
+    }//GEN-LAST:event_outerDiameterFocusLost
 
     private void invertCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_invertCheckBoxItemStateChanged
         showPreview();
-}//GEN-LAST:event_invertCheckBoxItemStateChanged
-
-    private void donateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_donateMenuItemActionPerformed
-        try {
-            if (Desktop.isDesktopSupported()) {
-                URI uri = URI.create(donateUrl);
-                Desktop.getDesktop().browse(uri);
-            } else {
-                JOptionPane.showMessageDialog(this, "To update, visit the download URL:\n" + donateUrl,
-                        "Oops", JOptionPane.OK_OPTION);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_donateMenuItemActionPerformed
+    }//GEN-LAST:event_invertCheckBoxItemStateChanged
 
     // Ensure that the aspect ratio of the encoderPanel is within about 5% of square
     // Otherwise, correct the width and height equally by half the error
@@ -972,6 +908,9 @@ public class MainFrame extends javax.swing.JFrame {
         this.repaint();
     }//GEN-LAST:event_formComponentResized
 
+    private void resolutionSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_resolutionSpinnerStateChanged
+        showPreview();
+    }//GEN-LAST:event_resolutionSpinnerStateChanged
 
     /** Set up the GUI to reflect the settings in the WheelEncoder object
      * Used for loading or opening new encoder.
@@ -1196,11 +1135,44 @@ public class MainFrame extends javax.swing.JFrame {
         return result;
     }
 
+
+    @Action
+    public void donate() {
+        try {
+            if (Desktop.isDesktopSupported()) {
+                URI uri = URI.create(donateUrl);
+                Desktop.getDesktop().browse(uri);
+            } else {
+                JOptionPane.showMessageDialog(this, "To update, visit the download URL:\n" + donateUrl,
+                        "Oops", JOptionPane.OK_OPTION);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
+    /** Report an issue by visiting issue URL */
+    @Action
+    public void reportIssue() {
+        try {
+            if (Desktop.isDesktopSupported()) {
+                URI uri = URI.create(issueUrl);
+                Desktop.getDesktop().browse(uri);
+            } else {
+                JOptionPane.showMessageDialog(this, "To report a problem, visit the Issues URL:\n" + issueUrl,
+                        "Oops", JOptionPane.OK_OPTION );
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(WheelEncoderGeneratorView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /** check for updated version and prompt user if so
      *
      */
-    private void promptUpdate(boolean verbose) {
+    @Action
+    public void promptUpdate(boolean verbose) {
         if (updateChecker.checkUpdate()) {
             Object[] options = {"Download", "Skip"};
             
@@ -1421,10 +1393,22 @@ public class MainFrame extends javax.swing.JFrame {
      * Calls promptSaveFirst() to check if file needs saving,
      * returns boolean true if ok to proceed; false otherwise
      */
+    @Action
     public boolean quit()
     {
         return promptSaveFirst();
     }
+
+    @Action
+    public void doExit() {
+        if (promptSaveFirst()) {
+            this.setVisible(false);
+            if (parentView != null) {
+                parentView.getFrame().dispose();
+            }
+        }
+    }
+
 
     @Action
     public void help() {
