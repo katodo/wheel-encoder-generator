@@ -263,7 +263,7 @@ public class ImageExportChooser extends JDialog {
         // when java.swing.JFileChooser is opened from a modal dialog
         this.setEnabled(false);
         selectedFile = null;
-        if (fc.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             selectedFile = fc.getSelectedFile();
             String path = selectedFile.getParent();
             String file = selectedFile.getName();
