@@ -1,0 +1,38 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Documents and Settings\Michael Shimniok\My Documents\NetBeansProjects\WheelEncoderGenerator\dist\WheelEncoderGenerator.jar</jar>
+  <outfile>C:\Documents and Settings\Michael Shimniok\My Documents\NetBeansProjects\WheelEncoderGenerator\dist\WheelEncoderGenerator.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>C:\Documents and Settings\Michael Shimniok\My Documents\NetBeansProjects\WheelEncoderGenerator\src\wheelencodergenerator\resources\windows\WheelEncoderGenerator.ico</icon>
+  <classPath>
+    <mainClass>wheelencodergenerator.WheelEncoderGeneratorApp</mainClass>
+    <cp>lib/appframework-1.0.3.jar</cp>
+    <cp>lib/swing-worker-1.1.jar</cp>
+    <cp>lib/beansbinding-1.2.1.jar</cp>
+    <cp>lib/AbsoluteLayout.jar</cp>
+    <cp>lib/libbt.jar</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <minVersion>1.6.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <initialHeapSize>50</initialHeapSize>
+    <maxHeapSize>128</maxHeapSize>
+  </jre>
+  <splash>
+    <file>C:\Documents and Settings\Michael Shimniok\My Documents\NetBeansProjects\WheelEncoderGenerator\src\wheelencodergenerator\resources\windows\splash.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>60</timeout>
+    <timeoutErr>true</timeoutErr>
+  </splash>
+</launch4jConfig>

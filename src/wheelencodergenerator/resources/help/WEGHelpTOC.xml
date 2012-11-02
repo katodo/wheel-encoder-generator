@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+ @(#)IdeHelpTOC.xml	1.5 06/10/30
+ 
+ Copyright (c) 2006 Sun Microsystems, Inc.  All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 
+ - Redistribution of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in
+   the documentation and/or other materials provided with the
+   distribution.
+ 
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+ 
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN MICROSYSTEMS, INC. ("SUN") AND ITS LICENSORS SHALL
+ NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF
+ USING, MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS
+ DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE FOR
+ ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL,
+ CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND
+ REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR
+ INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS BEEN ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGES.
+ 
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility. 
+--><!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN" "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+<toc version="1.0">
+ <tocitem expand="true" image="toplevelfolder" presentationname="Main" target="top" text="WheelEncoderGenerator Help">
+
+   <tocitem expand="true" text="Encoder Reference"><tocitem expand="false" target="aboutencoders_html" text="About rotary encoders"/><tocitem target="sensors_html" text="Reflective and interrupter sensors"/><tocitem target="choosing_html" text="Choosing an encoder type"/><tocitem target="gray_html" text="Gray Code encoders"/><tocitem target="binary_html" text="Binary Code encoders"/></tocitem>
+
+   <tocitem expand="true" text="Guide To...">
+       
+       <tocitem target="tut.incremental" text="Designing incremental encoders"/>
+   <tocitem target="absolute_html" text="Designing absolute encoders"/><tocitem target="tut.diameters" text="Setting encoder diameters"/><tocitem target="other_html" text="Other encoder settings"/><tocitem target="printing_html" text="Printing encoders"/><tocitem target="exporting_html" text="Exporting images"/></tocitem>
+
+   <tocitem expand="true" text="Menus and Tools">
+      <tocitem target="menus.file" text="File Menu"/>
+      <tocitem expand="false" target="menus.toolbar" text="Toolbar"/><tocitem expand="false" target="update_html" text="Checking for Updates"/><tocitem expand="false" target="report_html" text="Reporting Issues"/>
+   </tocitem><tocitem expand="true" text="Solving Problems"><tocitem expand="false" target="cantopen_html" text="If you can't open an encoder"/><tocitem target="cantsave_html" text="If you can't save an encoder"/><tocitem target="cantexport_html" text="If you can't export an image"/><tocitem target="printsize_html" text="If your encoder prints too large or small"/></tocitem>
+
+ </tocitem>
+</toc>

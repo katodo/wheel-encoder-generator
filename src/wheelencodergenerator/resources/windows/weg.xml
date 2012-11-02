@@ -1,0 +1,30 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Documents and Settings\Michael Shimniok\My Documents\NetBeansProjects\WheelEncoderGenerator\dist\WheelEncoderGenerator.jar</jar>
+  <outfile>WheelEncoderGenerator.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>true</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon></icon>
+  <classPath>
+    <mainClass>wheelencodergenerator.WheelEncoderGeneratorApp</mainClass>
+    <cp>lib/AbsoluteLayout.jar</cp>
+    <cp>lib/appframework-1.0.3.jar</cp>
+    <cp>lib/beansbinding-1.2.1.jar</cp>
+    <cp>lib/jhall.jar</cp>
+    <cp>lib/swing-worker-1.1.jar</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <minVersion>1.6.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+  </jre>
+</launch4jConfig>
